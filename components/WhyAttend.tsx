@@ -99,9 +99,9 @@ export default function WhyAttend() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                   </div>
-                  <div className="text-left flex-1 flex flex-col justify-center min-w-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-tight truncate">{feature.title}</h3>
-                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed line-clamp-2">{feature.description}</p>
+                  <div className={`${language === 'ar' ? 'text-right' : 'text-left'} flex-1 flex flex-col justify-center min-w-0`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                    <h3 className={`text-base sm:text-lg ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''} text-white mb-2 leading-tight`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif", overflowWrap: 'break-word', wordBreak: 'normal' } : { overflowWrap: 'break-word', wordBreak: 'normal', unicodeBidi: 'embed' }} dir={language === 'ar' ? 'rtl' : 'ltr'}>{feature.title}</h3>
+                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed" style={{ overflowWrap: 'break-word', wordBreak: 'normal', ...(language === 'ar' ? { unicodeBidi: 'embed' } : {}) }} dir={language === 'ar' ? 'rtl' : 'ltr'}>{feature.description}</p>
                   </div>
 
                   {/* Glow effect - shows when card is active (centered) */}
@@ -133,7 +133,7 @@ export default function WhyAttend() {
                   <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                 </div>
                 <div className="text-center flex-[0.1] flex flex-col justify-center">
-                  <h3 className="text-sm md:text-lg lg:text-xl font-bold text-white mb-1 md:mb-2 leading-tight">{feature.title}</h3>
+                  <h3 className={`text-xs md:text-base lg:text-lg ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''} text-white mb-1 md:mb-2 leading-tight`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif" } : {}}>{feature.title}</h3>
                   <p className="text-[10px] md:text-sm text-gray-400 leading-relaxed hidden md:block">{feature.description}</p>
                 </div>
 

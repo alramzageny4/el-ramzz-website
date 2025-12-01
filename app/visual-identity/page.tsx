@@ -160,7 +160,7 @@ const getImagePath = (projectId: string, image: string): string => {
 }
 
 export default function VisualIdentityPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const sectionRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -615,7 +615,7 @@ export default function VisualIdentityPage() {
 
                   {/* Project Info */}
                   <div className="text-center">
-                    <h3 className="text-xs sm:text-sm md:text-lg lg:text-2xl font-bold text-white mb-1 sm:mb-2 leading-tight">{t(project.titleKey)}</h3>
+                    <h3 className={`text-xs sm:text-sm md:text-lg lg:text-2xl ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''} text-white mb-1 sm:mb-2 leading-tight`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif" } : {}}>{t(project.titleKey)}</h3>
                     <p className="text-lavender text-[10px] sm:text-xs md:text-sm font-semibold mb-0.5 sm:mb-1">{t(project.roleKey)}</p>
                     <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm mb-1 sm:mb-2 md:mb-3 hidden sm:block">{t(project.companyKey)}</p>
                     <p className="text-gray-500 text-[10px] sm:text-xs md:text-sm leading-relaxed px-1 sm:px-2 line-clamp-2 sm:line-clamp-3 md:line-clamp-4 hidden md:block">

@@ -13,7 +13,7 @@ if (typeof window !== 'undefined') {
 // Schedule items are now defined inside the component to use translations
 
 export default function Schedule() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const sectionRef = useRef<HTMLDivElement>(null)
   const itemsRef = useRef<HTMLDivElement>(null)
   const [visibleItems, setVisibleItems] = useState<boolean[]>([])
@@ -181,7 +181,7 @@ export default function Schedule() {
                       <span className="text-xl md:text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-purple-blue">
                         {item.number}
                       </span>
-                      <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white">{item.title}</h3>
+                      <h3 className={`text-lg md:text-xl lg:text-2xl ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''} text-white`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif" } : {}}>{item.title}</h3>
                     </div>
                     {item.speaker && (
                       <p className="text-sm md:text-base text-lavender font-semibold mb-2 md:mb-3">{item.speaker}</p>

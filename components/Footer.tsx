@@ -25,15 +25,17 @@ export default function Footer() {
             <p className="text-xs sm:text-sm md:text-base text-gray-400 mb-3 sm:mb-4 md:mb-6 max-w-md">
               {t('footer_description')}
             </p>
-            <div className="flex gap-1 sm:gap-2 md:gap-4 justify-start flex-wrap" dir="ltr">
-              {(language === 'ar' ? ['Z', 'M', 'A', 'R', 'L', 'E'] : ['E', 'L', 'R', 'A', 'M', 'Z']).map((letter, index) => (
+            <div className="flex gap-1 sm:gap-2 md:gap-4 justify-start flex-wrap" dir="ltr" style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>
+              {['E', 'L', 'R', 'A', 'M', 'Z'].map((letter, index) => (
                 <div
-                  key={letter}
+                  key={`${letter}-${index}`}
                   className="group relative w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 rounded-md sm:rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
                   style={{
                     background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(99, 102, 241, 0.3) 50%, rgba(59, 130, 246, 0.3) 100%)',
                     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                    animationDelay: `${index * 0.1}s`
+                    animationDelay: `${index * 0.1}s`,
+                    direction: 'ltr',
+                    unicodeBidi: 'isolate'
                   }}
                 >
                   {/* Hover background effect */}
@@ -57,6 +59,8 @@ export default function Footer() {
                     className="relative z-10 text-white/90 font-bold text-xs sm:text-sm md:text-lg transition-all duration-400 group-hover:text-white group-hover:scale-110 group-hover:rotate-3"
                     style={{
                       textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                      direction: 'ltr',
+                      unicodeBidi: 'isolate'
                     }}
                   >
                     {letter}

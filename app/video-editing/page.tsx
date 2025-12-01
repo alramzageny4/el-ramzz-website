@@ -31,7 +31,7 @@ function getVimeoId(url: string): string | null {
 }
 
 export default function VideoEditingPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const router = useRouter()
   const sectionRef = useRef<HTMLDivElement>(null)
   const categoriesRef = useRef<HTMLDivElement>(null)
@@ -385,7 +385,7 @@ export default function VideoEditingPage() {
 
                       {/* Content */}
                       <div>
-                        <h3 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 sm:mb-2 leading-tight">
+                        <h3 className={`text-xs sm:text-sm md:text-lg lg:text-xl ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''} text-white mb-1 sm:mb-2 leading-tight`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif" } : {}}>
                           {item.title}
                         </h3>
                         <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm leading-relaxed hidden sm:block">

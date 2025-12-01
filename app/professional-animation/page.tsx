@@ -147,7 +147,7 @@ function VideoPlayerWithBuffering({ src }: { src: string }) {
 }
 
 export default function ProfessionalAnimationPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const router = useRouter()
   const sectionRef = useRef<HTMLDivElement>(null)
   const [selectedVideo, setSelectedVideo] = useState<{
@@ -265,7 +265,7 @@ export default function ProfessionalAnimationPage() {
               </svg>
               {t('nav_home')}
             </button>
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl text-white mb-6 ${t('video_category_animation').includes('Professional') ? 'font-normal' : 'font-bold'}`}>
+            <h1 className={`section-title text-5xl md:text-6xl lg:text-7xl ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''} text-white mb-6`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif" } : {}}>
               {t('video_category_animation')}
             </h1>
             <div className="w-24 h-1 bg-gradient-purple-blue mx-auto mb-6"></div>
@@ -332,7 +332,7 @@ export default function ProfessionalAnimationPage() {
 
                   {/* Content */}
                   <div>
-                    <h3 className={`text-xs sm:text-sm md:text-lg lg:text-xl text-white mb-1 sm:mb-2 leading-tight ${video.title.includes('Professional') ? 'font-normal' : 'font-bold'}`}>
+                    <h3 className={`text-xs sm:text-sm md:text-lg lg:text-xl text-white mb-1 sm:mb-2 leading-tight ${language === 'ar' ? 'font-bold' : 'font-normal'} ${language === 'en' ? 'font-sans' : ''}`} style={language === 'en' ? { fontFamily: "'Cairo', 'Inter', sans-serif" } : {}}>
                       {video.title}
                     </h3>
                     <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm leading-relaxed hidden sm:block">
