@@ -52,7 +52,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     }
   }
 
-  // Scroll to specific card index - works with RTL
+  // Scroll to specific card index - works with RTL (fast transition)
   const scrollToCard = (index: number) => {
     if (!scrollRef.current) return
     
@@ -62,12 +62,35 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     
     const cardElement = cards[index] as HTMLElement
     
-    // Use scrollIntoView for better RTL support
-    cardElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center'
-    })
+    // Use scrollIntoView with fast custom animation
+    const containerRect = container.getBoundingClientRect()
+    const cardRect = cardElement.getBoundingClientRect()
+    const containerCenter = containerRect.left + containerRect.width / 2
+    const cardCenter = cardRect.left + cardRect.width / 2
+    const currentScroll = container.scrollLeft
+    const scrollDistance = cardCenter - containerCenter
+    
+    // Fast animation: 200ms instead of default smooth scroll
+    const startTime = performance.now()
+    const duration = 200
+    
+    const animateScroll = (currentTime: number) => {
+      const elapsed = currentTime - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      
+      // Smooth easing function
+      const ease = progress < 0.5 
+        ? 2 * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2
+      
+      container.scrollLeft = currentScroll + scrollDistance * ease
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll)
+      }
+    }
+    
+    requestAnimationFrame(animateScroll)
   }
 
   // Handle next/previous navigation - works with RTL

@@ -99,9 +99,9 @@ export default function WhyAttend() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                   </div>
-                  <div className="text-left flex-1 flex flex-col justify-center">
-                    <h3 className="text-xl font-bold text-white mb-2 leading-tight">{feature.title}</h3>
-                    <p className="text-base text-gray-300 leading-relaxed">{feature.description}</p>
+                  <div className="text-left flex-1 flex flex-col justify-center min-w-0">
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-tight truncate">{feature.title}</h3>
+                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed line-clamp-2">{feature.description}</p>
                   </div>
 
                   {/* Glow effect on hover only (not on touch/active) */}
