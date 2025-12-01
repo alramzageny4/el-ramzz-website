@@ -117,9 +117,9 @@ function NeuralConnection({ start, end, index, intensity = 1 }: {
   index: number
   intensity?: number
 }) {
-  const lineRef = useRef<THREE.Line>(null)
-  const glowLineRef = useRef<THREE.Line>(null)
-  const trailRef = useRef<THREE.Line>(null)
+  const lineRef = useRef<THREE.Line | null>(null)
+  const glowLineRef = useRef<THREE.Line | null>(null)
+  const trailRef = useRef<THREE.Line | null>(null)
   
   const geometry = useMemo(() => {
     const points = [new THREE.Vector3(...start), new THREE.Vector3(...end)]
@@ -151,16 +151,22 @@ function NeuralConnection({ start, end, index, intensity = 1 }: {
 
   // Create line objects with useMemo
   const glowLine = useMemo(() => {
-    const line = new THREE.Line(glowGeometry, glowMaterial)
-    glowLineRef.current = line
-    return line
+    return new THREE.Line(glowGeometry, glowMaterial)
   }, [glowGeometry, glowMaterial])
   
   const mainLine = useMemo(() => {
-    const line = new THREE.Line(geometry, material)
-    lineRef.current = line
-    return line
+    return new THREE.Line(geometry, material)
   }, [geometry, material])
+
+  // Set refs in useEffect
+  useEffect(() => {
+    if (glowLineRef.current === null && glowLine) {
+      glowLineRef.current = glowLine
+    }
+    if (lineRef.current === null && mainLine) {
+      lineRef.current = mainLine
+    }
+  }, [glowLine, mainLine])
 
   // Enhanced animated pulse effect with stronger glow
   useFrame((state) => {
