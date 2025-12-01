@@ -76,15 +76,15 @@ export default function WhyAttend() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+        <div ref={cardsRef} className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
               className="relative group film-grain"
             >
-              <div className="relative h-full p-3 sm:p-4 md:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2">
+              <div className="relative h-full p-5 sm:p-4 md:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2">
                 {/* Large image placeholder with purple overlay */}
-                <div className="relative w-full h-32 sm:h-32 md:h-48 lg:h-64 mb-2 sm:mb-3 md:mb-6 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+                <div className="relative w-full h-56 sm:h-32 md:h-48 lg:h-64 mb-4 sm:mb-3 md:mb-6 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   <Image 
                     src={feature.icon} 
                     alt={feature.title}
@@ -92,12 +92,12 @@ export default function WhyAttend() {
                     loading="lazy"
                     quality={85}
                     className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                    sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                 </div>
                 <div className="text-center">
-                  <h3 className="text-sm sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 sm:mb-2 leading-tight">{feature.title}</h3>
+                  <h3 className="text-lg sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-2 leading-tight">{feature.title}</h3>
                   <p className="text-gray-400 leading-relaxed text-[10px] sm:text-xs md:text-sm hidden sm:block">{feature.description}</p>
                 </div>
 
