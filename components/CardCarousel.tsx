@@ -52,42 +52,44 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     }
   }
 
-  // Scroll to specific card index
+  // Scroll to specific card index - works with RTL
   const scrollToCard = (index: number) => {
     if (!scrollRef.current) return
     
     const container = scrollRef.current
-    // Get the actual card element
     const cards = container.children
     if (!cards[index]) return
     
     const cardElement = cards[index] as HTMLElement
-    const cardRect = cardElement.getBoundingClientRect()
-    const containerRect = container.getBoundingClientRect()
     
-    // Calculate scroll position to center the card
-    const scrollPosition = cardElement.offsetLeft - (containerRect.width / 2) + (cardRect.width / 2)
-    
-    container.scrollTo({
-      left: scrollPosition,
-      behavior: 'smooth'
+    // Use scrollIntoView for better RTL support
+    cardElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center'
     })
   }
 
-  // Handle next/previous navigation
+  // Handle next/previous navigation - works with RTL
   const goToNext = () => {
-    if (currentIndex < totalCards - 1) {
-      const nextIndex = currentIndex + 1
+    const nextIndex = currentIndex + 1
+    if (nextIndex < totalCards) {
       setCurrentIndex(nextIndex)
-      scrollToCard(nextIndex)
+      // Use setTimeout to ensure state update before scroll
+      setTimeout(() => {
+        scrollToCard(nextIndex)
+      }, 10)
     }
   }
 
   const goToPrevious = () => {
-    if (currentIndex > 0) {
-      const prevIndex = currentIndex - 1
+    const prevIndex = currentIndex - 1
+    if (prevIndex >= 0) {
       setCurrentIndex(prevIndex)
-      scrollToCard(prevIndex)
+      // Use setTimeout to ensure state update before scroll
+      setTimeout(() => {
+        scrollToCard(prevIndex)
+      }, 10)
     }
   }
 
@@ -124,36 +126,42 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     }
   }, [currentIndex, isRTL])
 
-  // Handle scroll events to update current index
+  // Handle scroll events to update current index - works with RTL
   useEffect(() => {
     const container = scrollRef.current
     if (!container) return
 
+    let scrollTimeout: NodeJS.Timeout
+
     const handleScroll = () => {
-      updateScrollButtons()
-      
-      // Find the card closest to center
-      const containerRect = container.getBoundingClientRect()
-      const containerCenter = containerRect.left + containerRect.width / 2
-      
-      let closestIndex = 0
-      let closestDistance = Infinity
-      
-      for (let i = 0; i < container.children.length; i++) {
-        const card = container.children[i] as HTMLElement
-        const cardRect = card.getBoundingClientRect()
-        const cardCenter = cardRect.left + cardRect.width / 2
-        const distance = Math.abs(cardCenter - containerCenter)
+      // Debounce scroll events for better performance
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        updateScrollButtons()
         
-        if (distance < closestDistance) {
-          closestDistance = distance
-          closestIndex = i
+        // Find the card closest to center - works with RTL
+        const containerRect = container.getBoundingClientRect()
+        const containerCenter = containerRect.left + containerRect.width / 2
+        
+        let closestIndex = 0
+        let closestDistance = Infinity
+        
+        for (let i = 0; i < container.children.length; i++) {
+          const card = container.children[i] as HTMLElement
+          const cardRect = card.getBoundingClientRect()
+          const cardCenter = cardRect.left + cardRect.width / 2
+          const distance = Math.abs(cardCenter - containerCenter)
+          
+          if (distance < closestDistance) {
+            closestDistance = distance
+            closestIndex = i
+          }
         }
-      }
-      
-      if (closestIndex !== currentIndex) {
-        setCurrentIndex(closestIndex)
-      }
+        
+        if (closestIndex !== currentIndex) {
+          setCurrentIndex(closestIndex)
+        }
+      }, 50)
     }
 
     container.addEventListener('scroll', handleScroll, { passive: true })
@@ -161,12 +169,14 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
 
     return () => {
       container.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
     }
   }, [currentIndex, totalCards, isRTL])
 
-  // Mouse drag handlers with better snap
+  // Mouse drag handlers with better snap - works with RTL
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return
+    e.preventDefault()
     setIsDragging(true)
     startX.current = e.pageX
     scrollLeft.current = scrollRef.current.scrollLeft
@@ -177,7 +187,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     if (!isDragging || !scrollRef.current) return
     e.preventDefault()
     const x = e.pageX
-    const walk = (x - startX.current) * 1.5 // Smoother multiplier
+    const walk = (x - startX.current) * 1.2 // Smoother multiplier
     scrollRef.current.scrollLeft = scrollLeft.current - walk
   }
 
@@ -185,32 +195,35 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     if (!isDragging || !scrollRef.current) return
     setIsDragging(false)
     
-    // Find closest card to snap to
-    const containerRect = scrollRef.current.getBoundingClientRect()
-    const containerCenter = containerRect.left + containerRect.width / 2
-    
-    let closestIndex = 0
-    let closestDistance = Infinity
-    
-    for (let i = 0; i < scrollRef.current.children.length; i++) {
-      const card = scrollRef.current.children[i] as HTMLElement
-      const cardRect = card.getBoundingClientRect()
-      const cardCenter = cardRect.left + cardRect.width / 2
-      const distance = Math.abs(cardCenter - containerCenter)
+    // Use requestAnimationFrame for smoother snap
+    requestAnimationFrame(() => {
+      if (!scrollRef.current) return
       
-      if (distance < closestDistance) {
-        closestDistance = distance
-        closestIndex = i
+      // Find closest card to snap to - works with RTL
+      const containerRect = scrollRef.current.getBoundingClientRect()
+      const containerCenter = containerRect.left + containerRect.width / 2
+      
+      let closestIndex = 0
+      let closestDistance = Infinity
+      
+      for (let i = 0; i < scrollRef.current.children.length; i++) {
+        const card = scrollRef.current.children[i] as HTMLElement
+        const cardRect = card.getBoundingClientRect()
+        const cardCenter = cardRect.left + cardRect.width / 2
+        const distance = Math.abs(cardCenter - containerCenter)
+        
+        if (distance < closestDistance) {
+          closestDistance = distance
+          closestIndex = i
+        }
       }
-    }
-    
-    // Snap to closest card
-    setTimeout(() => {
+      
+      // Snap to closest card
       scrollToCard(closestIndex)
-    }, 50)
+    })
   }
 
-  // Touch handlers with better snap
+  // Touch handlers with better snap - works with RTL
   const touchStartX = useRef(0)
   const touchScrollLeft = useRef(0)
   const touchStartTime = useRef(0)
@@ -224,44 +237,40 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!scrollRef.current) return
-    e.preventDefault()
     const x = e.touches[0].pageX
-    const walk = (x - touchStartX.current) * 1.5 // Smoother multiplier
+    const walk = (x - touchStartX.current) * 1.2 // Smoother multiplier
     scrollRef.current.scrollLeft = touchScrollLeft.current - walk
   }
 
   const handleTouchEnd = () => {
     if (!scrollRef.current) return
     
-    // Calculate velocity for better snap
-    const touchEndTime = Date.now()
-    const duration = touchEndTime - touchStartTime.current
-    const distance = Math.abs(scrollRef.current.scrollLeft - touchScrollLeft.current)
-    const velocity = distance / duration
-    
-    // Find closest card to snap to
-    const containerRect = scrollRef.current.getBoundingClientRect()
-    const containerCenter = containerRect.left + containerRect.width / 2
-    
-    let closestIndex = 0
-    let closestDistance = Infinity
-    
-    for (let i = 0; i < scrollRef.current.children.length; i++) {
-      const card = scrollRef.current.children[i] as HTMLElement
-      const cardRect = card.getBoundingClientRect()
-      const cardCenter = cardRect.left + cardRect.width / 2
-      const distance = Math.abs(cardCenter - containerCenter)
+    // Use requestAnimationFrame for smoother snap
+    requestAnimationFrame(() => {
+      if (!scrollRef.current) return
       
-      if (distance < closestDistance) {
-        closestDistance = distance
-        closestIndex = i
+      // Find closest card to snap to - works with RTL
+      const containerRect = scrollRef.current.getBoundingClientRect()
+      const containerCenter = containerRect.left + containerRect.width / 2
+      
+      let closestIndex = 0
+      let closestDistance = Infinity
+      
+      for (let i = 0; i < scrollRef.current.children.length; i++) {
+        const card = scrollRef.current.children[i] as HTMLElement
+        const cardRect = card.getBoundingClientRect()
+        const cardCenter = cardRect.left + cardRect.width / 2
+        const distance = Math.abs(cardCenter - containerCenter)
+        
+        if (distance < closestDistance) {
+          closestDistance = distance
+          closestIndex = i
+        }
       }
-    }
-    
-    // Snap to closest card
-    setTimeout(() => {
+      
+      // Snap to closest card
       scrollToCard(closestIndex)
-    }, 50)
+    })
   }
 
   // Arrow button component
@@ -271,7 +280,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     disabled 
   }: { 
     direction: 'left' | 'right'
-    onClick: () => void
+    onClick: (e: React.MouseEvent) => void
     disabled: boolean
   }) => {
     const isLeft = direction === 'left'
@@ -283,28 +292,28 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
       show = isRTL ? currentIndex > 0 : currentIndex < totalCards - 1
     }
     
-    if (!show) return null
+    if (!show || disabled) return null
 
     return (
       <button
         onClick={onClick}
-        disabled={disabled || !show}
+        disabled={disabled}
         className={`
-          absolute top-1/2 -translate-y-1/2 z-20
+          absolute top-1/2 -translate-y-1/2 z-30
           ${isRTL ? (isLeft ? 'left-2' : 'right-2') : (isLeft ? 'left-2' : 'right-2')}
           w-10 h-10 sm:w-12 sm:h-12
           flex items-center justify-center
           rounded-full
-          bg-dark-navy/80 backdrop-blur-sm
-          border border-purple-500/50
+          bg-dark-navy/90 backdrop-blur-sm
+          border-2 border-purple-500/70
           text-purple-400
           hover:text-neon-purple
           hover:border-neon-purple
-          hover:bg-dark-navy/90
+          hover:bg-dark-navy
           active:scale-95
           transition-all duration-200
-          shadow-lg
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'}
+          shadow-xl
+          cursor-pointer
           focus:outline-none focus:ring-2 focus:ring-purple-500/50
         `}
         aria-label={isLeft ? (isRTL ? 'Next card' : 'Previous card') : (isRTL ? 'Previous card' : 'Next card')}
@@ -315,7 +324,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isLeft ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isLeft ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
         </svg>
       </button>
     )
@@ -335,12 +344,12 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
           snap-x snap-mandatory
           scrollbar-hide
           ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}
-          scroll-smooth
         `}
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'smooth',
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -377,13 +386,29 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
       <div className="sm:hidden">
         <ArrowButton
           direction="left"
-          onClick={goToPrevious}
-          disabled={currentIndex === 0 && !isRTL || currentIndex === totalCards - 1 && isRTL}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            if (isRTL) {
+              goToNext()
+            } else {
+              goToPrevious()
+            }
+          }}
+          disabled={isRTL ? currentIndex >= totalCards - 1 : currentIndex <= 0}
         />
         <ArrowButton
           direction="right"
-          onClick={goToNext}
-          disabled={currentIndex === totalCards - 1 && !isRTL || currentIndex === 0 && isRTL}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            if (isRTL) {
+              goToPrevious()
+            } else {
+              goToNext()
+            }
+          }}
+          disabled={isRTL ? currentIndex <= 0 : currentIndex >= totalCards - 1}
         />
       </div>
 
