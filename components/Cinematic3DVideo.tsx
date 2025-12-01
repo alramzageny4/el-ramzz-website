@@ -190,10 +190,10 @@ export default function Cinematic3DVideo() {
       style={containerStyle}
       aria-hidden="true"
     >
-      {/* تأثير التوهج النيون - محسّن (مخفف) */}
+      {/* تأثير التوهج النيون - محسّن */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
-          className="absolute w-full h-full bg-gradient-radial from-purple-500/10 via-transparent to-transparent blur-2xl"
+          className="absolute w-full h-full bg-gradient-radial from-purple-500/17 via-transparent to-transparent blur-2xl"
           style={{ willChange: 'opacity' }}
         />
       </div>
@@ -235,10 +235,10 @@ export default function Cinematic3DVideo() {
         </div>
       )}
 
-      {/* تأثيرات إضافية للعمق - محسّنة (مخففة) */}
+      {/* تأثيرات إضافية للعمق - محسّنة */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-gradient-radial from-purple-500/5 via-blue-500/2 to-transparent blur-xl"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-gradient-radial from-purple-500/17 via-blue-500/10 to-transparent blur-xl"
           style={{ willChange: 'opacity' }}
         />
       </div>
