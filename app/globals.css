@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-purple: #A855F7;
+  --deep-indigo: #4C1D95;
+  --blue-violet: #6366F1;
+  --lavender: #C084FC;
+  --dark-navy: #0F172A;
+  --purple-glow: #9333EA;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Disable default smooth scroll for faster GSAP control */
+  scroll-padding-top: 80px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Enhanced smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: 'Cairo', 'Inter', sans-serif;
+  background: var(--dark-navy);
+  color: #ffffff;
+  overflow-x: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  min-height: auto;
+}
+
+
+
+@keyframes grid-move {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Beautiful font for section titles */
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Enhanced Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-navy);
+  border-left: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-purple), var(--blue-violet));
+  border-radius: 6px;
+  border: 2px solid var(--dark-navy);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--lavender), var(--neon-purple));
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(168, 85, 247, 0.3);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5), 0 0 40px rgba(99, 102, 241, 0.3);
+}
+
+/* Film grain effect */
+.film-grain::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Vignette */
+.vignette::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(15, 23, 42, 0.4) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Smooth transitions for all interactive elements - optimized for speed */
+a, button, input, textarea, select {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Enhanced link transitions */
+a {
+  position: relative;
+  text-decoration: none;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(to right, var(--neon-purple), var(--blue-violet));
+  transition: width 0.15s ease;
+  will-change: width;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Shimmer animation for buttons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Enhanced focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--neon-purple);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 3D Transform utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse glow animation for space effects */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Shooting star animation */
+@keyframes shooting-star {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.animate-shooting-star {
+  animation: shooting-star 8s linear infinite;
+  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+/* Small shooting star at bottom animation - falling from left to right */
+@keyframes shooting-star-bottom {
+  0% {
+    transform: translateX(-50px) translateY(-100px);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(calc(50vw - 25px)) translateY(50px);
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 50px)) translateY(150px);
+    opacity: 0;
+  }
+}
+
+/* Small shooting star at bottom animation - falling from right to left */
+@keyframes shooting-star-bottom-reverse {
+  0% {
+    transform: translateX(calc(100vw + 50px)) translateY(-100px);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(calc(50vw + 25px)) translateY(50px);
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50px) translateY(150px);
+    opacity: 0;
+  }
+}
+
+.animate-shooting-star-bottom {
+  animation: shooting-star-bottom 8s linear infinite;
+  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+}
+
+.animate-shooting-star-bottom-reverse {
+  animation: shooting-star-bottom-reverse 10s linear infinite;
+  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+}
+
+/* Radial gradient utility */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Water drop word animation styles */
+.word-drop {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Title word animation styles */
+.title-word {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Gentle floating animation for contact button */
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-gentle-float {
+  animation: gentle-float 4s ease-in-out infinite;
+}
+
+/* Cinematic 3D Video Styles */
+.cinematic-3d-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.cinematic-3d-video-container video {
+  position: relative;
+  z-index: 10;
+  width: auto;
+  height: 60vh;
+  max-width: 90vw;
+  object-fit: contain;
+  filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 80px rgba(168, 85, 247, 0.4));
+  background-color: transparent;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: block;
+}
+
+/* Wrapper لإزالة الخلفية السوداء من الفيديو */
+.cinematic-3d-video-container > div {
+  mix-blend-mode: lighten;
+  /* خيارات بديلة إذا لم يعمل lighten:
+     mix-blend-mode: screen; 
+     mix-blend-mode: difference;
+     mix-blend-mode: exclusion;
+  */
+}
+
+/* Responsive video sizes */
+@media (max-width: 768px) {
+  .cinematic-3d-video-container video {
+    height: 50vh;
+    max-width: 95vw;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cinematic-3d-video-container video {
+    height: 55vh;
+    max-width: 92vw;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-3d-video-container {
+    animation: none;
+  }
+}
+

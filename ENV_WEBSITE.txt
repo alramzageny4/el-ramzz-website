@@ -1,0 +1,8 @@
+قم بنسخ هذا المحتوى إلى ملف .env.local في مجلد موقع الرمز
+
+# URL نظام الإدارة المرفوع على Vercel
+NEXT_PUBLIC_MANAGEMENT_API_URL=https://el-ramzz.vercel.app
+
+# API Key للحماية (يجب أن يطابق WEBSITE_API_KEY في نظام الإدارة)
+NEXT_PUBLIC_MANAGEMENT_API_KEY=ramzz-agency-secret-key-2024
+
