@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -149,6 +149,19 @@ function NeuralConnection({ start, end, index, intensity = 1 }: {
     })
   }, [intensity])
 
+  // Create line objects with useMemo
+  const glowLine = useMemo(() => {
+    const line = new THREE.Line(glowGeometry, glowMaterial)
+    glowLineRef.current = line
+    return line
+  }, [glowGeometry, glowMaterial])
+  
+  const mainLine = useMemo(() => {
+    const line = new THREE.Line(geometry, material)
+    lineRef.current = line
+    return line
+  }, [geometry, material])
+
   // Enhanced animated pulse effect with stronger glow
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
@@ -165,9 +178,9 @@ function NeuralConnection({ start, end, index, intensity = 1 }: {
   return (
     <group>
       {/* Glow line */}
-      <line ref={glowLineRef} geometry={glowGeometry} material={glowMaterial} />
+      <primitive ref={glowLineRef} object={glowLine} />
       {/* Main connection line */}
-      <line ref={lineRef} geometry={geometry} material={material} />
+      <primitive ref={lineRef} object={mainLine} />
     </group>
   )
 }
