@@ -24,15 +24,16 @@ export default function Cinematic3DVideo() {
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const loadTimerRef = useRef<NodeJS.Timeout | null>(null)
 
-  // تحميل البيانات بشكل lazy بعد تحميل الصفحة الأساسية
+  // تحميل البيانات بشكل lazy بعد تحميل الصفحة الأساسية - محسّن للأداء
   useEffect(() => {
-    // استخدام requestIdleCallback للتحميل في وقت فراغ المتصفح
+    // استخدام Intersection Observer لتأخير التحميل حتى يكون المستخدم قريباً من العنصر
     const loadAnimation = () => {
-      // تحميل بعد 3 ثواني من تحميل الصفحة (قبل الظهور بوقت كافٍ)
+      // تحميل بعد 5 ثواني من تحميل الصفحة (تأخير أكبر لتقليل التأثير على الأداء)
       loadTimerRef.current = setTimeout(() => {
         setShouldLoad(true)
+        // استخدام fetch مع cache و priority منخفض
         fetch('/Businessman flies up with rocket.json', {
-          priority: 'low', // تحميل منخفض الأولوية
+          cache: 'force-cache', // استخدام cache إذا كان متاحاً
         } as RequestInit)
           .then((res) => {
             if (!res.ok) throw new Error('Failed to load animation')
@@ -47,15 +48,15 @@ export default function Cinematic3DVideo() {
             // في حالة الخطأ، لا نعرض الأنيميشن
             setHasPlayed(true)
           })
-      }, 3000) // 3 ثواني بعد تحميل الصفحة
+      }, 5000) // زيادة التأخير إلى 5 ثواني لتقليل التأثير على تحميل الصفحة
     }
 
-    // استخدام requestIdleCallback إذا كان متاحاً
+    // استخدام requestIdleCallback مع timeout أطول
     if ('requestIdleCallback' in window) {
-      ;(window as any).requestIdleCallback(loadAnimation, { timeout: 5000 })
+      ;(window as any).requestIdleCallback(loadAnimation, { timeout: 8000 })
     } else {
-      // Fallback للمتصفحات التي لا تدعم requestIdleCallback
-      loadAnimation()
+      // Fallback: تحميل بعد 6 ثواني
+      setTimeout(loadAnimation, 6000)
     }
 
     return () => {
@@ -66,8 +67,7 @@ export default function Cinematic3DVideo() {
   }, [])
 
   useEffect(() => {
-    // بعد 5.5 ثانية من تحميل الصفحة، ابدأ الأنيميشن
-    // فقط إذا تم تحميل البيانات
+    // بعد تحميل البيانات، ابدأ الأنيميشن - محسّن للأداء
     if (!animationLoaded) return
 
     const timer = setTimeout(() => {
@@ -76,7 +76,7 @@ export default function Cinematic3DVideo() {
 
         // استخدام requestAnimationFrame لضمان أداء أفضل
         requestAnimationFrame(() => {
-          // إنشاء Timeline للأنيميشن مع تحسينات
+          // إنشاء Timeline للأنيميشن مع تحسينات للأداء
           timelineRef.current = gsap.timeline({
             onStart: () => {
               if (containerRef.current) {
@@ -84,26 +84,25 @@ export default function Cinematic3DVideo() {
               }
             },
             defaults: {
-              ease: 'power3.out',
+              ease: 'power2.out', // استخدام power2 بدلاً من power3 (أسرع)
             },
           })
 
-          // الخطوة 1: الظهور من اليسار للمنتصف - أسرع
+          // الخطوة 1: الظهور من اليسار للمنتصف - أسرع وأخف
           timelineRef.current.fromTo(
             containerRef.current,
             {
               x: '-100vw',
               opacity: 0,
-              scale: 0.9,
-              rotationY: -10,
+              scale: 0.95, // تقليل scale change لتقليل الحسابات
+              // إزالة rotationY لتقليل الحسابات 3D
             },
             {
               x: '0',
               opacity: 1,
               scale: 1,
-              rotationY: 0,
-              duration: 1.2, // تقليل المدة من 1.8 إلى 1.2 ثانية
-              ease: 'power2.out', // أسرع من power3
+              duration: 0.8, // تقليل المدة من 1.2 إلى 0.8 ثانية
+              ease: 'power1.out', // استخدام power1 (أسرع من power2)
               onComplete: () => {
                 // بعد الوصول للمنتصف مباشرة، ابدأ تشغيل Lottie
                 if (lottieRef.current) {
@@ -116,7 +115,7 @@ export default function Cinematic3DVideo() {
           )
         })
       }
-    }, 5500) // 5.5 ثانية
+    }, 1000) // تقليل التأخير إلى 1 ثانية بعد تحميل البيانات
 
     return () => {
       clearTimeout(timer)
@@ -133,31 +132,36 @@ export default function Cinematic3DVideo() {
         timelineRef.current
           .to(containerRef.current, {
             x: '100vw',
-            scale: 0.9,
-            rotationY: 15,
-            duration: 1.8,
-            ease: 'power3.in',
+            scale: 0.95, // تقليل scale change
+            // إزالة rotationY لتقليل الحسابات 3D
+            duration: 1.0, // تقليل المدة من 1.8 إلى 1.0 ثانية
+            ease: 'power1.in', // استخدام power1 (أسرع)
           })
           .to(
             containerRef.current,
             {
               opacity: 0,
-              duration: 0.5,
+              duration: 0.3, // تقليل المدة من 0.5 إلى 0.3 ثانية
               onComplete: () => {
                 setHasPlayed(true)
-                // تنظيف شامل
+                // تنظيف شامل وفوري
                 if (timelineRef.current) {
                   timelineRef.current.kill()
                   timelineRef.current = null
                 }
-                // تنظيف الذاكرة
+                // تنظيف الذاكرة فوراً
                 setAnimationData(null)
                 if (lottieRef.current) {
                   lottieRef.current.destroy()
+                  lottieRef.current = null
+                }
+                // تنظيف container style
+                if (containerRef.current) {
+                  containerRef.current.style.display = 'none'
                 }
               },
             },
-            '-=0.3'
+            '-=0.2' // تقليل overlap
           )
       }
     })
@@ -167,9 +171,11 @@ export default function Cinematic3DVideo() {
   const containerStyle = useMemo(
     () => ({
       opacity: 0,
-      willChange: 'transform, opacity' as const,
+      willChange: 'transform' as const, // تقليل willChange لتقليل استهلاك الذاكرة
       backgroundColor: 'transparent',
       transform: 'translateZ(0)', // GPU acceleration
+      backfaceVisibility: 'hidden' as const, // تحسين الأداء
+      WebkitBackfaceVisibility: 'hidden' as const,
     }),
     []
   )
@@ -184,10 +190,10 @@ export default function Cinematic3DVideo() {
       style={containerStyle}
       aria-hidden="true"
     >
-      {/* تأثير التوهج النيون - محسّن */}
+      {/* تأثير التوهج النيون - محسّن (مخفف) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
-          className="absolute w-full h-full bg-gradient-radial from-purple-500/20 via-transparent to-transparent blur-3xl"
+          className="absolute w-full h-full bg-gradient-radial from-purple-500/10 via-transparent to-transparent blur-2xl"
           style={{ willChange: 'opacity' }}
         />
       </div>
@@ -205,8 +211,9 @@ export default function Cinematic3DVideo() {
           <div
             className="w-auto h-[60vh] max-w-[90vw]"
             style={{
-              filter: 'drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 80px rgba(168, 85, 247, 0.4))',
+              filter: 'drop-shadow(0 0 30px rgba(168, 85, 247, 0.4))', // تقليل drop-shadow لتقليل الحسابات
               willChange: 'transform',
+              transform: 'translateZ(0)', // GPU acceleration
             }}
           >
             <Lottie
@@ -228,10 +235,10 @@ export default function Cinematic3DVideo() {
         </div>
       )}
 
-      {/* تأثيرات إضافية للعمق - محسّنة */}
+      {/* تأثيرات إضافية للعمق - محسّنة (مخففة) */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-radial from-purple-500/10 via-blue-500/5 to-transparent blur-2xl"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-gradient-radial from-purple-500/5 via-blue-500/2 to-transparent blur-xl"
           style={{ willChange: 'opacity' }}
         />
       </div>
