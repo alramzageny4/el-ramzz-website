@@ -2,7 +2,6 @@
 
 import { Suspense, useRef, useEffect, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import * as THREE from 'three'
 
 // Load and display OBJ model (static, no rotation)
@@ -12,7 +11,10 @@ function OBJModel({ url }: { url: string }) {
   const [model, setModel] = useState<THREE.Group | null>(null)
 
   useEffect(() => {
-    const loader = new OBJLoader()
+    // Dynamic import for OBJLoader to avoid build issues
+    import('three/examples/jsm/loaders/OBJLoader.js').then((module) => {
+      const { OBJLoader } = module
+      const loader = new OBJLoader()
     loader.load(
       url,
       (object) => {
@@ -51,6 +53,9 @@ function OBJModel({ url }: { url: string }) {
         console.error('Error loading OBJ:', error)
       }
     )
+    }).catch((error) => {
+      console.error('Error loading OBJLoader:', error)
+    })
   }, [url, camera])
 
   if (!model) return null
