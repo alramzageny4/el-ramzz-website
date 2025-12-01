@@ -85,7 +85,7 @@ export default function WhyAttend() {
                 key={index}
                 className="relative group film-grain h-full"
               >
-                <div className="relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover-only-border transition-all duration-300 hover-only-shadow flex flex-row items-center gap-5 min-h-[180px] shadow-xl">
+                <div className="relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover-only-border transition-all duration-300 hover-only-shadow flex flex-row items-center gap-5 min-h-[180px] shadow-xl card-glow-container">
                   {/* Large icon on mobile - 140x140 */}
                   <div className="relative w-[140px] h-[140px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue shadow-lg">
                     <Image 
@@ -104,8 +104,8 @@ export default function WhyAttend() {
                     <p className="text-sm sm:text-base text-gray-300 leading-relaxed line-clamp-2">{feature.description}</p>
                   </div>
 
-                  {/* Glow effect on hover only (not on touch/active) */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-purple-blue opacity-0 hover-only-opacity transition-opacity duration-150 -z-10 blur-xl"></div>
+                  {/* Glow effect - shows when card is active (centered) */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-purple-blue opacity-0 hover-only-opacity card-glow transition-opacity duration-300 -z-10 blur-xl"></div>
                 </div>
               </div>
             ))}

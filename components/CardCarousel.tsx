@@ -62,7 +62,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     
     const cardElement = cards[index] as HTMLElement
     
-    // Use scrollIntoView with fast custom animation
+    // Use scrollIntoView for better RTL support with fast animation
     const containerRect = container.getBoundingClientRect()
     const cardRect = cardElement.getBoundingClientRect()
     const containerCenter = containerRect.left + containerRect.width / 2
@@ -70,7 +70,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     const currentScroll = container.scrollLeft
     const scrollDistance = cardCenter - containerCenter
     
-    // Fast animation: 200ms instead of default smooth scroll
+    // Fast animation: 200ms for smooth but quick transition
     const startTime = performance.now()
     const duration = 200
     
@@ -78,15 +78,20 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
       const elapsed = currentTime - startTime
       const progress = Math.min(elapsed / duration, 1)
       
-      // Smooth easing function
-      const ease = progress < 0.5 
-        ? 2 * progress * progress 
-        : 1 - Math.pow(-2 * progress + 2, 2) / 2
+      // Smooth easing function (ease-out)
+      const ease = 1 - Math.pow(1 - progress, 3)
       
       container.scrollLeft = currentScroll + scrollDistance * ease
       
       if (progress < 1) {
         requestAnimationFrame(animateScroll)
+      } else {
+        // Ensure final position is correct
+        cardElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'nearest',
+          inline: 'center'
+        })
       }
     }
     
@@ -149,6 +154,24 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     }
   }, [currentIndex, isRTL])
 
+  // Update data attributes for active card glow effect
+  useEffect(() => {
+    if (!scrollRef.current) return
+    
+    const cards = scrollRef.current.children
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i] as HTMLElement
+      const isActive = i === currentIndex
+      card.setAttribute('data-is-active', isActive.toString())
+      
+      // Update glow effect in child card
+      const cardContainer = card.querySelector('.card-glow-container') as HTMLElement
+      if (cardContainer) {
+        cardContainer.setAttribute('data-is-active', isActive.toString())
+      }
+    }
+  }, [currentIndex, totalCards])
+
   // Handle scroll events to update current index - works with RTL
   useEffect(() => {
     const container = scrollRef.current
@@ -204,19 +227,25 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     startX.current = e.pageX
     scrollLeft.current = scrollRef.current.scrollLeft
     dragStartTime.current = Date.now()
+    // Disable smooth scroll during drag
+    scrollRef.current.style.scrollBehavior = 'auto'
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !scrollRef.current) return
     e.preventDefault()
     const x = e.pageX
-    const walk = (x - startX.current) * 1.2 // Smoother multiplier
-    scrollRef.current.scrollLeft = scrollLeft.current - walk
+    const deltaX = x - startX.current
+    // Direct scroll update for smooth dragging
+    scrollRef.current.scrollLeft = scrollLeft.current - deltaX
   }
 
   const handleMouseUp = () => {
     if (!isDragging || !scrollRef.current) return
     setIsDragging(false)
+    
+    // Re-enable smooth scroll
+    scrollRef.current.style.scrollBehavior = 'smooth'
     
     // Use requestAnimationFrame for smoother snap
     requestAnimationFrame(() => {
@@ -250,23 +279,33 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
   const touchStartX = useRef(0)
   const touchScrollLeft = useRef(0)
   const touchStartTime = useRef(0)
+  const isTouching = useRef(false)
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!scrollRef.current) return
+    isTouching.current = true
     touchStartX.current = e.touches[0].pageX
     touchScrollLeft.current = scrollRef.current.scrollLeft
     touchStartTime.current = Date.now()
+    // Disable smooth scroll during touch
+    scrollRef.current.style.scrollBehavior = 'auto'
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!scrollRef.current) return
+    if (!scrollRef.current || !isTouching.current) return
+    e.preventDefault()
     const x = e.touches[0].pageX
-    const walk = (x - touchStartX.current) * 1.2 // Smoother multiplier
-    scrollRef.current.scrollLeft = touchScrollLeft.current - walk
+    const deltaX = x - touchStartX.current
+    // Direct scroll update for smooth touch dragging
+    scrollRef.current.scrollLeft = touchScrollLeft.current - deltaX
   }
 
   const handleTouchEnd = () => {
-    if (!scrollRef.current) return
+    if (!scrollRef.current || !isTouching.current) return
+    isTouching.current = false
+    
+    // Re-enable smooth scroll
+    scrollRef.current.style.scrollBehavior = 'smooth'
     
     // Use requestAnimationFrame for smoother snap
     requestAnimationFrame(() => {
@@ -390,7 +429,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
               w-[90%] sm:w-[90%] md:w-[48%] lg:w-[33.333%]
               px-2
               snap-center
-              transition-transform duration-300 ease-out
+              transition-all duration-300 ease-out
               ${index === currentIndex 
                 ? 'scale-100 opacity-100' 
                 : 'scale-90 opacity-70'
@@ -399,6 +438,8 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
             style={{
               scrollSnapAlign: 'center',
             }}
+            data-card-index={index}
+            data-is-active={index === currentIndex}
           >
             {child}
           </div>

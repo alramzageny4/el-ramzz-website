@@ -108,7 +108,7 @@ export default function Speakers() {
             {speakers.map((speaker, index) => {
               const cardContent = (
                 <div
-                  className={`relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover-only-border transition-all duration-300 hover-only-shadow flex flex-row items-center gap-5 min-h-[180px] shadow-xl ${
+                  className={`relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover-only-border transition-all duration-300 hover-only-shadow flex flex-row items-center gap-5 min-h-[180px] shadow-xl card-glow-container ${
                     speaker.link ? 'cursor-pointer' : ''
                   }`}
                 >
@@ -146,8 +146,8 @@ export default function Speakers() {
                     )}
                   </div>
 
-                  {/* Glow effect on hover only (not on touch/active) */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-purple-blue opacity-0 hover-only-opacity transition-opacity duration-150 -z-10 blur-xl"></div>
+                  {/* Glow effect - shows when card is active (centered) */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-purple-blue opacity-0 hover-only-opacity card-glow transition-opacity duration-300 -z-10 blur-xl"></div>
                 </div>
               )
 
