@@ -59,14 +59,14 @@ export default function WhyAttend() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-24 px-6 overflow-hidden z-10"
+      className="relative py-32 px-2 sm:px-4 md:px-6 overflow-hidden z-10"
     >
       
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent z-0"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <h2 className="section-title text-5xl md:text-6xl font-bold text-white mb-4">
             {t('services_title')}
           </h2>
@@ -76,15 +76,15 @@ export default function WhyAttend() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+        <div ref={cardsRef} className="grid grid-cols-3 gap-1 sm:gap-2 md:gap-4 lg:gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
               className="relative group film-grain"
             >
-              <div className="relative h-full p-4 sm:p-4 md:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2">
-                {/* Large image placeholder with purple overlay */}
-                <div className="relative w-full aspect-[4/3] sm:aspect-[4/3] md:aspect-[3/2] lg:aspect-[16/10] mb-2 sm:mb-2 md:mb-4 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+              <div className="relative h-full p-2 sm:p-3 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-col">
+                {/* Large image placeholder with purple overlay - 90% of card height, wide aspect ratio */}
+                <div className="relative w-full flex-[0.9] aspect-[16/9] sm:aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] mb-1 sm:mb-2 md:mb-3 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   <Image 
                     src={feature.icon} 
                     alt={feature.title}
@@ -96,8 +96,8 @@ export default function WhyAttend() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                 </div>
-                <div className="text-center">
-                  <h3 className="text-sm sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-2 leading-tight">{feature.title}</h3>
+                <div className="text-center flex-[0.1] flex flex-col justify-center">
+                  <h3 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 sm:mb-2 leading-tight">{feature.title}</h3>
                   <p className="text-gray-400 leading-relaxed text-[10px] sm:text-xs md:text-sm hidden sm:block">{feature.description}</p>
                 </div>
 
