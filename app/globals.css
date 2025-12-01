@@ -437,7 +437,7 @@ a:hover::after {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
 }
 

@@ -135,7 +135,7 @@ export default function Speakers() {
                   </div>
 
                   <div className="text-left flex-1 flex flex-col justify-center min-w-0">
-                    <h3 className={`text-lg sm:text-xl font-bold text-white mb-2 leading-tight break-words ${speaker.name.includes('Professional') ? 'text-base sm:text-lg' : ''}`}>{speaker.name}</h3>
+                    <h3 className={`text-lg sm:text-xl text-white mb-2 leading-tight break-words ${speaker.name.includes('Professional') ? 'text-sm sm:text-base font-normal' : 'font-bold'}`}>{speaker.name}</h3>
                     <p className="text-sm sm:text-base text-lavender font-semibold mb-1 break-words">{speaker.role}</p>
                     <p className="text-sm sm:text-base text-gray-300 mb-2 break-words">{speaker.company}</p>
                     {speaker.description && (
