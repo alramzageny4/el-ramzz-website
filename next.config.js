@@ -94,9 +94,10 @@ const nextConfig = {
   },
 
   // Experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-  },
+  // Note: optimizeCss requires 'critters' package, removed to avoid build errors
+  // experimental: {
+  //   optimizeCss: true,
+  // },
 }
 
 module.exports = nextConfig
