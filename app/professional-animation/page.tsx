@@ -265,7 +265,7 @@ export default function ProfessionalAnimationPage() {
               </svg>
               {t('nav_home')}
             </button>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+            <h1 className={`text-5xl md:text-6xl lg:text-7xl text-white mb-6 ${t('video_category_animation').includes('Professional') ? 'font-normal' : 'font-bold'}`}>
               {t('video_category_animation')}
             </h1>
             <div className="w-24 h-1 bg-gradient-purple-blue mx-auto mb-6"></div>
@@ -332,7 +332,7 @@ export default function ProfessionalAnimationPage() {
 
                   {/* Content */}
                   <div>
-                    <h3 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 sm:mb-2 leading-tight">
+                    <h3 className={`text-xs sm:text-sm md:text-lg lg:text-xl text-white mb-1 sm:mb-2 leading-tight ${video.title.includes('Professional') ? 'font-normal' : 'font-bold'}`}>
                       {video.title}
                     </h3>
                     <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm leading-relaxed hidden sm:block">

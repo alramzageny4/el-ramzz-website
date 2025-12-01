@@ -243,7 +243,7 @@ export default function VideoEditingPage() {
             >
               {/* Category Header */}
               <div className="text-center mb-12">
-                <h2 className="section-title text-4xl md:text-5xl font-bold text-white mb-4">
+                <h2 className={`section-title text-4xl md:text-5xl text-white mb-4 ${category.title.includes('Professional') ? 'font-normal' : 'font-bold'}`}>
                   {category.title}
                 </h2>
                 <div className="w-20 h-1 bg-gradient-purple-blue mx-auto mb-4"></div>
