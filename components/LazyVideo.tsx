@@ -28,7 +28,7 @@ export default function LazyVideo({
   onMouseLeave,
   poster,
 }: LazyVideoProps) {
-  const [videoRef, isIntersecting] = useIntersectionObserver<HTMLVideoElement>({
+  const [containerRef, isIntersecting] = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
     rootMargin: '100px',
   })
@@ -92,7 +92,7 @@ export default function LazyVideo({
   }, [shouldLoad, preload])
 
   return (
-    <div className={`relative ${className}`} ref={videoRef}>
+    <div className={`relative ${className}`} ref={containerRef}>
       {shouldLoad && (
         <video
           ref={videoElementRef}
