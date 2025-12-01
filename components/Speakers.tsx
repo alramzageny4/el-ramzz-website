@@ -101,16 +101,16 @@ export default function Speakers() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
+        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-4 md:gap-6 lg:gap-8">
           {speakers.map((speaker, index) => {
             const cardContent = (
               <div
-                className={`relative h-full p-2 sm:p-4 md:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 md:border-2 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 ${
+                className={`relative h-full p-4 sm:p-4 md:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 md:border-2 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 ${
                   speaker.link ? 'cursor-pointer' : ''
                 }`}
               >
                 {/* Image placeholder with purple overlay */}
-                <div className="relative w-full h-24 sm:h-32 md:h-48 lg:h-64 mb-2 sm:mb-3 md:mb-6 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+                <div className="relative w-full h-40 sm:h-32 md:h-48 lg:h-64 mb-3 sm:mb-3 md:mb-6 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   {speaker.isImage ? (
                     <>
                       <Image
@@ -118,7 +118,7 @@ export default function Speakers() {
                         alt={speaker.name}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
                         loading="lazy"
                         quality={85}
                       />
@@ -135,9 +135,9 @@ export default function Speakers() {
                 </div>
 
                 <div className="text-center">
-                  <h3 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 sm:mb-2 leading-tight">{speaker.name}</h3>
-                  <p className="text-lavender text-[10px] sm:text-xs md:text-sm font-semibold mb-0.5 sm:mb-1">{speaker.role}</p>
-                  <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm mb-1 sm:mb-2 hidden sm:block">{speaker.company}</p>
+                  <h3 className="text-base sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-2 leading-tight">{speaker.name}</h3>
+                  <p className="text-lavender text-xs sm:text-xs md:text-sm font-semibold mb-1 sm:mb-1">{speaker.role}</p>
+                  <p className="text-gray-400 text-xs sm:text-xs md:text-sm mb-2 sm:mb-2 block">{speaker.company}</p>
                   {speaker.description && (
                     <p className="text-gray-500 text-xs leading-relaxed line-clamp-4 mt-2 px-2 hidden md:block">{speaker.description}</p>
                   )}
