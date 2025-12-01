@@ -286,15 +286,6 @@ const translations = {
     video_animation_item4: 'أنيميشن احترافي 4',
     video_animation_item4_desc: 'أنيميشن احترافي ثلاثي الأبعاد مصمم بطريقة مبتكرة مع عرض دقيق للفيديو بالشكل الأصلي',
     
-    // Footer
-    footer_brand: 'الرمز',
-    footer_description: 'وكالة إبداعية متخصصة في التصميم والمونتاج والأنيميشن. نحول أفكارك إلى واقع رقمي مذهل بجودة عالية وإبداع لا محدود.',
-    footer_quick_links: 'روابط سريعة',
-    footer_contact: 'تواصل معنا',
-    footer_rights: '© 2026 الرمز - وكالة التصميم. جميع الحقوق محفوظة.',
-    footer_privacy: 'سياسة الخصوصية',
-    footer_terms: 'شروط الخدمة',
-    
     // Privacy Policy
     privacy_title: 'سياسة الخصوصية',
     privacy_last_updated: 'آخر تحديث: يناير 2026',
