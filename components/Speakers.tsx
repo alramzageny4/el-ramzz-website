@@ -97,14 +97,11 @@ export default function Speakers() {
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-3">
             {t('portfolio_subtitle')}
           </p>
-          <p className="text-lg text-purple-400/80 max-w-2xl mx-auto font-medium">
-            {t('portfolio_cta')}
-          </p>
         </div>
 
         {/* Mobile Carousel */}
-        <div className="sm:hidden">
-          <CardCarousel>
+        <div className="sm:hidden relative">
+          <CardCarousel showPointingHand={true}>
             {speakers.map((speaker, index) => {
               const cardContent = (
                 <div
@@ -138,7 +135,7 @@ export default function Speakers() {
                   </div>
 
                   <div className="text-left flex-1 flex flex-col justify-center min-w-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-tight break-words">{speaker.name}</h3>
+                    <h3 className={`text-lg sm:text-xl font-bold text-white mb-2 leading-tight break-words ${speaker.name.includes('Professional') ? 'text-base sm:text-lg' : ''}`}>{speaker.name}</h3>
                     <p className="text-sm sm:text-base text-lavender font-semibold mb-1 break-words">{speaker.role}</p>
                     <p className="text-sm sm:text-base text-gray-300 mb-2 break-words">{speaker.company}</p>
                     {speaker.description && (

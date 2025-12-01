@@ -6,9 +6,80 @@ import { useLanguage } from '@/contexts/LanguageContext'
 interface CardCarouselProps {
   children: ReactNode[]
   className?: string
+  showPointingHand?: boolean
 }
 
-export default function CardCarousel({ children, className = '' }: CardCarouselProps) {
+// Pointing hand component that follows the active card
+function PointingHand({ 
+  scrollRef, 
+  currentIndex, 
+  totalCards 
+}: { 
+  scrollRef: React.RefObject<HTMLDivElement>
+  currentIndex: number
+  totalCards: number
+}) {
+  const [handPosition, setHandPosition] = useState(0)
+
+  useEffect(() => {
+    const updateHandPosition = () => {
+      if (!scrollRef.current) return
+      
+      const cards = scrollRef.current.children
+      if (!cards[currentIndex]) return
+      
+      const card = cards[currentIndex] as HTMLElement
+      const containerRect = scrollRef.current.getBoundingClientRect()
+      const cardRect = card.getBoundingClientRect()
+      const cardCenter = cardRect.left + cardRect.width / 2
+      const containerCenter = containerRect.left + containerRect.width / 2
+      const offset = cardCenter - containerCenter
+      
+      setHandPosition(offset)
+    }
+
+    updateHandPosition()
+    
+    // Update on scroll and resize
+    const container = scrollRef.current
+    if (container) {
+      container.addEventListener('scroll', updateHandPosition, { passive: true })
+      window.addEventListener('resize', updateHandPosition)
+      // Use requestAnimationFrame for smooth updates
+      const rafId = requestAnimationFrame(updateHandPosition)
+      
+      return () => {
+        container.removeEventListener('scroll', updateHandPosition)
+        window.removeEventListener('resize', updateHandPosition)
+        cancelAnimationFrame(rafId)
+      }
+    }
+  }, [currentIndex, scrollRef])
+
+  return (
+    <div className="sm:hidden absolute bottom-4 left-1/2 z-30 pointer-events-none">
+      <div 
+        className="transition-transform duration-300 ease-out"
+        style={{
+          transform: `translateX(${handPosition}px)`
+        }}
+      >
+        <div className="pointing-hand-animate">
+          <svg
+            className="w-8 h-8 text-red-500 drop-shadow-lg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            style={{ transform: 'rotate(90deg)' }}
+          >
+            <path d="M9 11.24V7.5a2.5 2.5 0 0 1 5 0v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function CardCarousel({ children, className = '', showPointingHand = false }: CardCarouselProps) {
   const { language } = useLanguage()
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -391,6 +462,15 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
           </div>
         ))}
       </div>
+
+      {/* Animated pointing hand - follows active card */}
+      {showPointingHand && (
+        <PointingHand 
+          scrollRef={scrollRef}
+          currentIndex={currentIndex}
+          totalCards={totalCards}
+        />
+      )}
 
       {/* Arrow buttons - only show on mobile */}
       <div className="sm:hidden">
