@@ -101,16 +101,16 @@ export default function Speakers() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-3 gap-1 sm:gap-2 md:gap-4 lg:gap-6">
+        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2 md:gap-4 lg:gap-6">
           {speakers.map((speaker, index) => {
             const cardContent = (
               <div
-                className={`relative h-full p-2 sm:p-3 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 md:border-2 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-col ${
+                className={`relative h-full p-4 sm:p-2 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 md:border-2 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-row sm:flex-col items-center sm:items-stretch gap-4 sm:gap-0 min-h-[160px] sm:min-h-0 ${
                   speaker.link ? 'cursor-pointer' : ''
                 }`}
               >
-                {/* Image placeholder with purple overlay - 90% of card height, wide aspect ratio */}
-                <div className="relative w-full flex-[0.9] aspect-[16/9] sm:aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] mb-1 sm:mb-2 md:mb-3 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+                {/* Large icon/image on mobile - 80x80, full image on desktop */}
+                <div className="relative w-20 h-20 sm:w-full sm:h-auto flex-shrink-0 sm:flex-shrink flex-[0.9] sm:aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] sm:mb-2 md:mb-3 rounded-lg sm:rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   {speaker.isImage ? (
                     <>
                       <Image
@@ -118,7 +118,7 @@ export default function Speakers() {
                         alt={speaker.name}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                        sizes="(max-width: 640px) 80px, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
                         loading="lazy"
                         quality={85}
                       />
@@ -134,10 +134,10 @@ export default function Speakers() {
                   )}
                 </div>
 
-                <div className="text-center flex-[0.1] flex flex-col justify-center">
-                  <h3 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 sm:mb-2 leading-tight">{speaker.name}</h3>
-                  <p className="text-lavender text-[10px] sm:text-xs md:text-sm font-semibold mb-0.5 sm:mb-1">{speaker.role}</p>
-                  <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm mb-1 sm:mb-2 hidden sm:block">{speaker.company}</p>
+                <div className="text-left sm:text-center flex-1 sm:flex-[0.1] flex flex-col justify-center">
+                  <h3 className="text-lg sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-1 md:mb-2 leading-tight">{speaker.name}</h3>
+                  <p className="text-sm sm:text-[10px] md:text-sm text-lavender font-semibold mb-1 sm:mb-0.5 md:mb-1">{speaker.role}</p>
+                  <p className="text-sm sm:text-[10px] md:text-sm text-gray-400 mb-1 sm:mb-2 block sm:hidden md:block">{speaker.company}</p>
                   {speaker.description && (
                     <p className="text-gray-500 text-xs leading-relaxed line-clamp-4 mt-2 px-2 hidden md:block">{speaker.description}</p>
                   )}
