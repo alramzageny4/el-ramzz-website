@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
+import CardCarousel from './CardCarousel'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -76,15 +77,50 @@ export default function WhyAttend() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2 md:gap-4 lg:gap-6">
+        {/* Mobile Carousel */}
+        <div className="sm:hidden">
+          <CardCarousel>
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="relative group film-grain h-full"
+              >
+                <div className="relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover:border-neon-purple transition-all duration-300 hover:shadow-glow-purple flex flex-row items-center gap-5 min-h-[180px] shadow-xl">
+                  {/* Large icon on mobile - 90x90 */}
+                  <div className="relative w-[90px] h-[90px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue">
+                    <Image 
+                      src={feature.icon} 
+                      alt={feature.title}
+                      fill
+                      loading="lazy"
+                      quality={85}
+                      className="object-cover"
+                      sizes="90px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
+                  </div>
+                  <div className="text-left flex-1 flex flex-col justify-center">
+                    <h3 className="text-xl font-bold text-white mb-2 leading-tight">{feature.title}</h3>
+                    <p className="text-base text-gray-300 leading-relaxed">{feature.description}</p>
+                  </div>
+
+                  {/* Glow effect on hover */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-purple-blue opacity-0 group-hover:opacity-10 transition-opacity duration-150 -z-10 blur-xl"></div>
+                </div>
+              </div>
+            ))}
+          </CardCarousel>
+        </div>
+
+        {/* Desktop Grid */}
+        <div ref={cardsRef} className="hidden sm:grid grid-cols-3 gap-2 md:gap-4 lg:gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
               className="relative group film-grain"
             >
-              <div className="relative h-full p-4 sm:p-2 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-row sm:flex-col items-center sm:items-stretch gap-4 sm:gap-0 min-h-[160px] sm:min-h-0">
-                {/* Large icon on mobile - 80x80, full image on desktop */}
-                <div className="relative w-20 h-20 sm:w-full sm:h-auto flex-shrink-0 sm:flex-shrink flex-[0.9] sm:aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] sm:mb-2 md:mb-3 rounded-lg sm:rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+              <div className="relative h-full p-2 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-col items-stretch">
+                <div className="relative w-full aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] mb-2 md:mb-3 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   <Image 
                     src={feature.icon} 
                     alt={feature.title}
@@ -92,13 +128,13 @@ export default function WhyAttend() {
                     loading="lazy"
                     quality={85}
                     className="object-cover"
-                    sizes="(max-width: 640px) 80px, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                    sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                 </div>
-                <div className="text-left sm:text-center flex-1 sm:flex-[0.1] flex flex-col justify-center">
-                  <h3 className="text-lg sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-1 md:mb-2 leading-tight">{feature.title}</h3>
-                  <p className="text-sm sm:text-[10px] md:text-sm text-gray-400 leading-relaxed block sm:hidden md:block">{feature.description}</p>
+                <div className="text-center flex-[0.1] flex flex-col justify-center">
+                  <h3 className="text-sm md:text-lg lg:text-xl font-bold text-white mb-1 md:mb-2 leading-tight">{feature.title}</h3>
+                  <p className="text-[10px] md:text-sm text-gray-400 leading-relaxed hidden md:block">{feature.description}</p>
                 </div>
 
                 {/* Glow effect on hover */}

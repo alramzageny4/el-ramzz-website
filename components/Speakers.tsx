@@ -6,6 +6,7 @@ import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLanguage } from '@/contexts/LanguageContext'
+import CardCarousel from './CardCarousel'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -101,16 +102,83 @@ export default function Speakers() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2 md:gap-4 lg:gap-6">
+        {/* Mobile Carousel */}
+        <div className="sm:hidden">
+          <CardCarousel>
+            {speakers.map((speaker, index) => {
+              const cardContent = (
+                <div
+                  className={`relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover:border-neon-purple transition-all duration-300 hover:shadow-glow-purple flex flex-row items-center gap-5 min-h-[180px] shadow-xl ${
+                    speaker.link ? 'cursor-pointer' : ''
+                  }`}
+                >
+                  {/* Large icon/image on mobile - 90x90 */}
+                  <div className="relative w-[90px] h-[90px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue">
+                    {speaker.isImage ? (
+                      <>
+                        <Image
+                          src={speaker.image}
+                          alt={speaker.name}
+                          fill
+                          className="object-cover"
+                          sizes="90px"
+                          loading="lazy"
+                          quality={85}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent"></div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-dark-navy/40 flex items-center justify-center text-4xl">
+                          {speaker.image}
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent"></div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="text-left flex-1 flex flex-col justify-center">
+                    <h3 className="text-xl font-bold text-white mb-2 leading-tight">{speaker.name}</h3>
+                    <p className="text-base text-lavender font-semibold mb-1">{speaker.role}</p>
+                    <p className="text-base text-gray-300 mb-2">{speaker.company}</p>
+                    {speaker.description && (
+                      <p className="text-sm text-gray-400 leading-relaxed line-clamp-3 mt-1">{speaker.description}</p>
+                    )}
+                  </div>
+
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-purple-blue opacity-0 group-hover:opacity-10 transition-opacity duration-150 -z-10 blur-xl"></div>
+                </div>
+              )
+
+              return (
+                <div
+                  key={index}
+                  className="relative group film-grain h-full"
+                >
+                  {speaker.link ? (
+                    <Link href={speaker.link} prefetch={true} className="block h-full">
+                      {cardContent}
+                    </Link>
+                  ) : (
+                    cardContent
+                  )}
+                </div>
+              )
+            })}
+          </CardCarousel>
+        </div>
+
+        {/* Desktop Grid */}
+        <div ref={cardsRef} className="hidden sm:grid grid-cols-3 gap-2 md:gap-4 lg:gap-6">
           {speakers.map((speaker, index) => {
             const cardContent = (
               <div
-                className={`relative h-full p-4 sm:p-2 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 md:border-2 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-row sm:flex-col items-center sm:items-stretch gap-4 sm:gap-0 min-h-[160px] sm:min-h-0 ${
+                className={`relative h-full p-2 md:p-4 lg:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 md:border-2 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2 flex flex-col items-stretch ${
                   speaker.link ? 'cursor-pointer' : ''
                 }`}
               >
-                {/* Large icon/image on mobile - 80x80, full image on desktop */}
-                <div className="relative w-20 h-20 sm:w-full sm:h-auto flex-shrink-0 sm:flex-shrink flex-[0.9] sm:aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] sm:mb-2 md:mb-3 rounded-lg sm:rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+                <div className="relative w-full aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] mb-2 md:mb-3 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   {speaker.isImage ? (
                     <>
                       <Image
@@ -118,7 +186,7 @@ export default function Speakers() {
                         alt={speaker.name}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 80px, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                        sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
                         loading="lazy"
                         quality={85}
                       />
@@ -134,10 +202,10 @@ export default function Speakers() {
                   )}
                 </div>
 
-                <div className="text-left sm:text-center flex-1 sm:flex-[0.1] flex flex-col justify-center">
-                  <h3 className="text-lg sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-1 md:mb-2 leading-tight">{speaker.name}</h3>
-                  <p className="text-sm sm:text-[10px] md:text-sm text-lavender font-semibold mb-1 sm:mb-0.5 md:mb-1">{speaker.role}</p>
-                  <p className="text-sm sm:text-[10px] md:text-sm text-gray-400 mb-1 sm:mb-2 block sm:hidden md:block">{speaker.company}</p>
+                <div className="text-center flex-[0.1] flex flex-col justify-center">
+                  <h3 className="text-sm md:text-lg lg:text-xl font-bold text-white mb-1 md:mb-2 leading-tight">{speaker.name}</h3>
+                  <p className="text-[10px] md:text-sm text-lavender font-semibold mb-0.5 md:mb-1">{speaker.role}</p>
+                  <p className="text-[10px] md:text-sm text-gray-400 mb-1 md:mb-2 hidden md:block">{speaker.company}</p>
                   {speaker.description && (
                     <p className="text-gray-500 text-xs leading-relaxed line-clamp-4 mt-2 px-2 hidden md:block">{speaker.description}</p>
                   )}
