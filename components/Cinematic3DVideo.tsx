@@ -217,8 +217,6 @@ export default function Cinematic3DVideo() {
               onComplete={handleComplete}
               rendererSettings={{
                 preserveAspectRatio: 'xMidYMid meet',
-                clearCanvas: true,
-                progressiveLoad: true, // تحميل تدريجي للأداء الأفضل
               }}
               style={{
                 width: '100%',
