@@ -135,7 +135,16 @@ export default function Speakers() {
                   </div>
 
                   <div className="text-left flex-1 flex flex-col justify-center min-w-0">
-                    <h3 className={`text-lg sm:text-xl text-white mb-2 leading-tight break-words ${speaker.name.includes('Professional') ? 'text-sm sm:text-base font-normal' : 'font-bold'}`}>{speaker.name}</h3>
+                    <h3 className={`text-lg sm:text-xl text-white mb-2 leading-tight break-words ${
+                      speaker.name.includes('Professional') || 
+                      speaker.name.includes('Visual Identity') || 
+                      speaker.name.includes('Video Editing') ||
+                      speaker.name.includes('مونتاج') ||
+                      speaker.name.includes('أنيميشن') ||
+                      speaker.name.includes('هوية بصرية')
+                        ? 'text-sm sm:text-base font-normal' 
+                        : 'font-bold'
+                    }`}>{speaker.name}</h3>
                     <p className="text-sm sm:text-base text-lavender font-semibold mb-1 break-words">{speaker.role}</p>
                     <p className="text-sm sm:text-base text-gray-300 mb-2 break-words">{speaker.company}</p>
                     {speaker.description && (
@@ -200,7 +209,16 @@ export default function Speakers() {
                 </div>
 
                 <div className="text-center flex-[0.1] flex flex-col justify-center">
-                  <h3 className="text-sm md:text-lg lg:text-xl font-bold text-white mb-1 md:mb-2 leading-tight">{speaker.name}</h3>
+                  <h3 className={`text-sm md:text-lg lg:text-xl text-white mb-1 md:mb-2 leading-tight ${
+                    speaker.name.includes('Professional') || 
+                    speaker.name.includes('Visual Identity') || 
+                    speaker.name.includes('Video Editing') ||
+                    speaker.name.includes('مونتاج') ||
+                    speaker.name.includes('أنيميشن') ||
+                    speaker.name.includes('هوية بصرية')
+                      ? 'font-normal' 
+                      : 'font-bold'
+                  }`}>{speaker.name}</h3>
                   <p className="text-[10px] md:text-sm text-lavender font-semibold mb-0.5 md:mb-1">{speaker.role}</p>
                   <p className="text-[10px] md:text-sm text-gray-400 mb-1 md:mb-2 hidden md:block">{speaker.company}</p>
                   {speaker.description && (
