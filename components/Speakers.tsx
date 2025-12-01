@@ -138,11 +138,11 @@ export default function Speakers() {
                   </div>
 
                   <div className="text-left flex-1 flex flex-col justify-center min-w-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-tight truncate">{speaker.name}</h3>
-                    <p className="text-sm sm:text-base text-lavender font-semibold mb-1 truncate">{speaker.role}</p>
-                    <p className="text-sm sm:text-base text-gray-300 mb-2 truncate">{speaker.company}</p>
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-tight break-words">{speaker.name}</h3>
+                    <p className="text-sm sm:text-base text-lavender font-semibold mb-1 break-words">{speaker.role}</p>
+                    <p className="text-sm sm:text-base text-gray-300 mb-2 break-words">{speaker.company}</p>
                     {speaker.description && (
-                      <p className="text-xs sm:text-sm text-gray-400 leading-relaxed line-clamp-3 mt-1">{speaker.description}</p>
+                      <p className="text-xs sm:text-sm text-gray-400 leading-relaxed break-words mt-1">{speaker.description}</p>
                     )}
                   </div>
 

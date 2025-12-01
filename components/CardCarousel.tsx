@@ -219,16 +219,14 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     }
   }, [currentIndex, totalCards, isRTL])
 
-  // Mouse drag handlers with better snap - works with RTL
+  // Mouse drag handlers - professional native scroll approach
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return
-    e.preventDefault()
     setIsDragging(true)
     startX.current = e.pageX
     scrollLeft.current = scrollRef.current.scrollLeft
-    dragStartTime.current = Date.now()
-    // Disable smooth scroll during drag
-    scrollRef.current.style.scrollBehavior = 'auto'
+    // Prevent text selection during drag
+    e.preventDefault()
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -236,103 +234,49 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     e.preventDefault()
     const x = e.pageX
     const deltaX = x - startX.current
-    // Direct scroll update for smooth dragging
+    // Smooth direct scroll update
     scrollRef.current.scrollLeft = scrollLeft.current - deltaX
   }
 
   const handleMouseUp = () => {
-    if (!isDragging || !scrollRef.current) return
+    if (!isDragging) return
     setIsDragging(false)
-    
-    // Re-enable smooth scroll
-    scrollRef.current.style.scrollBehavior = 'smooth'
-    
-    // Use requestAnimationFrame for smoother snap
-    requestAnimationFrame(() => {
-      if (!scrollRef.current) return
-      
-      // Find closest card to snap to - works with RTL
-      const containerRect = scrollRef.current.getBoundingClientRect()
-      const containerCenter = containerRect.left + containerRect.width / 2
-      
-      let closestIndex = 0
-      let closestDistance = Infinity
-      
-      for (let i = 0; i < scrollRef.current.children.length; i++) {
-        const card = scrollRef.current.children[i] as HTMLElement
-        const cardRect = card.getBoundingClientRect()
-        const cardCenter = cardRect.left + cardRect.width / 2
-        const distance = Math.abs(cardCenter - containerCenter)
-        
-        if (distance < closestDistance) {
-          closestDistance = distance
-          closestIndex = i
-        }
-      }
-      
-      // Snap to closest card
-      scrollToCard(closestIndex)
-    })
+    // CSS scroll-snap will handle the snap automatically
   }
 
-  // Touch handlers with better snap - works with RTL
+  // Touch handlers - professional native scroll with momentum
   const touchStartX = useRef(0)
   const touchScrollLeft = useRef(0)
-  const touchStartTime = useRef(0)
-  const isTouching = useRef(false)
+  const lastTouchX = useRef(0)
+  const velocity = useRef(0)
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!scrollRef.current) return
-    isTouching.current = true
     touchStartX.current = e.touches[0].pageX
+    lastTouchX.current = e.touches[0].pageX
     touchScrollLeft.current = scrollRef.current.scrollLeft
-    touchStartTime.current = Date.now()
-    // Disable smooth scroll during touch
-    scrollRef.current.style.scrollBehavior = 'auto'
+    velocity.current = 0
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!scrollRef.current || !isTouching.current) return
-    e.preventDefault()
+    if (!scrollRef.current) return
     const x = e.touches[0].pageX
     const deltaX = x - touchStartX.current
-    // Direct scroll update for smooth touch dragging
+    const deltaTime = 16 // Approximate frame time
+    
+    // Calculate velocity for momentum
+    velocity.current = (x - lastTouchX.current) / deltaTime
+    lastTouchX.current = x
+    
+    // Direct scroll update - smooth and responsive
     scrollRef.current.scrollLeft = touchScrollLeft.current - deltaX
   }
 
   const handleTouchEnd = () => {
-    if (!scrollRef.current || !isTouching.current) return
-    isTouching.current = false
+    if (!scrollRef.current) return
     
-    // Re-enable smooth scroll
-    scrollRef.current.style.scrollBehavior = 'smooth'
-    
-    // Use requestAnimationFrame for smoother snap
-    requestAnimationFrame(() => {
-      if (!scrollRef.current) return
-      
-      // Find closest card to snap to - works with RTL
-      const containerRect = scrollRef.current.getBoundingClientRect()
-      const containerCenter = containerRect.left + containerRect.width / 2
-      
-      let closestIndex = 0
-      let closestDistance = Infinity
-      
-      for (let i = 0; i < scrollRef.current.children.length; i++) {
-        const card = scrollRef.current.children[i] as HTMLElement
-        const cardRect = card.getBoundingClientRect()
-        const cardCenter = cardRect.left + cardRect.width / 2
-        const distance = Math.abs(cardCenter - containerCenter)
-        
-        if (distance < closestDistance) {
-          closestDistance = distance
-          closestIndex = i
-        }
-      }
-      
-      // Snap to closest card
-      scrollToCard(closestIndex)
-    })
+    // CSS scroll-snap will handle the snap automatically
+    // The browser's native scroll-snap will provide smooth, professional snapping
   }
 
   // Arrow button component
@@ -398,7 +342,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
       className={`relative w-full ${className}`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* Scrollable container */}
+      {/* Scrollable container - professional native scroll with CSS snap */}
       <div
         ref={scrollRef}
         className={`
@@ -412,6 +356,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
+          scrollSnapType: 'x mandatory',
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -437,6 +382,7 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
             `}
             style={{
               scrollSnapAlign: 'center',
+              scrollSnapStop: 'always',
             }}
             data-card-index={index}
             data-is-active={index === currentIndex}
