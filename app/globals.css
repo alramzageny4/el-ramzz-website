@@ -406,3 +406,18 @@ a:hover::after {
   }
 }
 
+/* Hover effects only on devices that support hover (not on touch devices) */
+@media (hover: hover) {
+  .hover-only-border:hover {
+    border-color: var(--neon-purple) !important;
+  }
+  
+  .hover-only-shadow:hover {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(168, 85, 247, 0.3) !important;
+  }
+  
+  .hover-only-opacity:hover {
+    opacity: 0.1 !important;
+  }
+}
+
