@@ -255,7 +255,11 @@ export default function VisualIdentityPage() {
           
           // If already complete (from hover preloading), mark immediately
           if (img.complete) {
-            setLoadedImages(prev => new Set([...prev, index]))
+            setLoadedImages(prev => {
+              const newSet = new Set(prev)
+              newSet.add(index)
+              return newSet
+            })
           } else {
             // Otherwise, continue loading
             img.crossOrigin = 'anonymous'
@@ -263,11 +267,19 @@ export default function VisualIdentityPage() {
             img.loading = 'eager'
             img.fetchPriority = index < 5 ? 'high' : 'auto'
             img.onload = () => {
-              setLoadedImages(prev => new Set([...prev, index]))
+              setLoadedImages(prev => {
+                const newSet = new Set(prev)
+                newSet.add(index)
+                return newSet
+              })
             }
             img.onerror = () => {
               // Mark as loaded even on error to prevent infinite loading
-              setLoadedImages(prev => new Set([...prev, index]))
+              setLoadedImages(prev => {
+                const newSet = new Set(prev)
+                newSet.add(index)
+                return newSet
+              })
             }
           }
         })
