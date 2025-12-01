@@ -25,8 +25,8 @@ export default function Footer() {
             <p className="text-xs sm:text-sm md:text-base text-gray-400 mb-3 sm:mb-4 md:mb-6 max-w-md">
               {t('footer_description')}
             </p>
-            <div className="flex gap-1 sm:gap-2 md:gap-4 justify-start flex-wrap">
-              {['E', 'L', 'R', 'A', 'M', 'Z'].map((letter, index) => (
+            <div className="flex gap-1 sm:gap-2 md:gap-4 justify-start flex-wrap" dir="ltr">
+              {(language === 'ar' ? ['Z', 'M', 'A', 'R', 'L', 'E'] : ['E', 'L', 'R', 'A', 'M', 'Z']).map((letter, index) => (
                 <div
                   key={letter}
                   className="group relative w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 rounded-md sm:rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
@@ -154,7 +154,7 @@ export default function Footer() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <span className="break-all">alramzagency@gmail.com</span>
+                  <span className="whitespace-nowrap break-keep">alramzagency@gmail.com</span>
                 </a>
                 
                 <a 
@@ -196,7 +196,7 @@ export default function Footer() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <span className="hidden sm:inline break-all">alramzagency@gmail.com</span>
+                  <span className="hidden sm:inline whitespace-nowrap break-keep">alramzagency@gmail.com</span>
                   <span className="sm:hidden">Email</span>
                 </a>
                 
