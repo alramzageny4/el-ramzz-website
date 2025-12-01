@@ -110,7 +110,7 @@ export default function Speakers() {
                 }`}
               >
                 {/* Image placeholder with purple overlay */}
-                <div className="relative w-full h-24 sm:h-32 md:h-48 lg:h-64 mb-1 sm:mb-2 md:mb-4 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+                <div className="relative w-full aspect-[4/3] sm:aspect-[4/3] md:aspect-[3/2] lg:aspect-[16/10] mb-1 sm:mb-2 md:mb-4 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   {speaker.isImage ? (
                     <>
                       <Image

@@ -84,7 +84,7 @@ export default function WhyAttend() {
             >
               <div className="relative h-full p-2 sm:p-4 md:p-6 bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 rounded-lg md:rounded-xl hover:border-neon-purple transition-all duration-150 hover:shadow-glow-purple hover:-translate-y-2">
                 {/* Large image placeholder with purple overlay */}
-                <div className="relative w-full h-24 sm:h-32 md:h-48 lg:h-64 mb-1 sm:mb-2 md:mb-4 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
+                <div className="relative w-full aspect-[4/3] sm:aspect-[4/3] md:aspect-[3/2] lg:aspect-[16/10] mb-1 sm:mb-2 md:mb-4 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   <Image 
                     src={feature.icon} 
                     alt={feature.title}
