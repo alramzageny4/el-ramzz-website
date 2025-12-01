@@ -17,8 +17,9 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
   const [canScrollRight, setCanScrollRight] = useState(true)
   const isRTL = language === 'ar'
   const [isDragging, setIsDragging] = useState(false)
-  const [startX, setStartX] = useState(0)
-  const [scrollLeft, setScrollLeft] = useState(0)
+  const startX = useRef(0)
+  const scrollLeft = useRef(0)
+  const dragStartTime = useRef(0)
 
   const totalCards = children.length
 
@@ -56,24 +57,21 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     if (!scrollRef.current) return
     
     const container = scrollRef.current
-    const cardWidth = container.clientWidth * 0.9 // 90% of container width
-    const gap = 16 // gap between cards
-    const scrollPosition = index * (cardWidth + gap)
+    // Get the actual card element
+    const cards = container.children
+    if (!cards[index]) return
     
-    // For RTL, we need to handle scroll differently
-    if (isRTL) {
-      // In RTL mode, scroll to negative position or use scrollLeft differently
-      const maxScroll = container.scrollWidth - container.clientWidth
-      container.scrollTo({
-        left: maxScroll - scrollPosition,
-        behavior: 'smooth'
-      })
-    } else {
-      container.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      })
-    }
+    const cardElement = cards[index] as HTMLElement
+    const cardRect = cardElement.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+    
+    // Calculate scroll position to center the card
+    const scrollPosition = cardElement.offsetLeft - (containerRect.width / 2) + (cardRect.width / 2)
+    
+    container.scrollTo({
+      left: scrollPosition,
+      behavior: 'smooth'
+    })
   }
 
   // Handle next/previous navigation
@@ -134,22 +132,27 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     const handleScroll = () => {
       updateScrollButtons()
       
-      // Calculate current card index based on scroll position
-      const cardWidth = container.clientWidth * 0.9
-      const gap = 16
-      let scrollPos = container.scrollLeft
+      // Find the card closest to center
+      const containerRect = container.getBoundingClientRect()
+      const containerCenter = containerRect.left + containerRect.width / 2
       
-      if (isRTL) {
-        // In RTL, calculate from the end
-        const maxScroll = container.scrollWidth - container.clientWidth
-        scrollPos = maxScroll - scrollPos
+      let closestIndex = 0
+      let closestDistance = Infinity
+      
+      for (let i = 0; i < container.children.length; i++) {
+        const card = container.children[i] as HTMLElement
+        const cardRect = card.getBoundingClientRect()
+        const cardCenter = cardRect.left + cardRect.width / 2
+        const distance = Math.abs(cardCenter - containerCenter)
+        
+        if (distance < closestDistance) {
+          closestDistance = distance
+          closestIndex = i
+        }
       }
       
-      const newIndex = Math.round(scrollPos / (cardWidth + gap))
-      const clampedIndex = Math.max(0, Math.min(newIndex, totalCards - 1))
-      
-      if (clampedIndex !== currentIndex) {
-        setCurrentIndex(clampedIndex)
+      if (closestIndex !== currentIndex) {
+        setCurrentIndex(closestIndex)
       }
     }
 
@@ -161,69 +164,104 @@ export default function CardCarousel({ children, className = '' }: CardCarouselP
     }
   }, [currentIndex, totalCards, isRTL])
 
-  // Mouse drag handlers
+  // Mouse drag handlers with better snap
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return
     setIsDragging(true)
-    setStartX(e.pageX - scrollRef.current.offsetLeft)
-    setScrollLeft(scrollRef.current.scrollLeft)
+    startX.current = e.pageX
+    scrollLeft.current = scrollRef.current.scrollLeft
+    dragStartTime.current = Date.now()
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !scrollRef.current) return
     e.preventDefault()
-    const x = e.pageX - scrollRef.current.offsetLeft
-    const walk = (x - startX) * 2
-    scrollRef.current.scrollLeft = scrollLeft - walk
+    const x = e.pageX
+    const walk = (x - startX.current) * 1.5 // Smoother multiplier
+    scrollRef.current.scrollLeft = scrollLeft.current - walk
   }
 
   const handleMouseUp = () => {
+    if (!isDragging || !scrollRef.current) return
     setIsDragging(false)
-    // Snap to nearest card after drag
-    if (scrollRef.current) {
-      const cardWidth = scrollRef.current.clientWidth * 0.9
-      const gap = 16
-      let scrollPos = scrollRef.current.scrollLeft
+    
+    // Find closest card to snap to
+    const containerRect = scrollRef.current.getBoundingClientRect()
+    const containerCenter = containerRect.left + containerRect.width / 2
+    
+    let closestIndex = 0
+    let closestDistance = Infinity
+    
+    for (let i = 0; i < scrollRef.current.children.length; i++) {
+      const card = scrollRef.current.children[i] as HTMLElement
+      const cardRect = card.getBoundingClientRect()
+      const cardCenter = cardRect.left + cardRect.width / 2
+      const distance = Math.abs(cardCenter - containerCenter)
       
-      if (isRTL) {
-        const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth
-        scrollPos = maxScroll - scrollPos
+      if (distance < closestDistance) {
+        closestDistance = distance
+        closestIndex = i
       }
-      
-      const newIndex = Math.round(scrollPos / (cardWidth + gap))
-      scrollToCard(Math.max(0, Math.min(newIndex, totalCards - 1)))
     }
+    
+    // Snap to closest card
+    setTimeout(() => {
+      scrollToCard(closestIndex)
+    }, 50)
   }
 
-  // Touch handlers
+  // Touch handlers with better snap
+  const touchStartX = useRef(0)
+  const touchScrollLeft = useRef(0)
+  const touchStartTime = useRef(0)
+
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!scrollRef.current) return
-    setStartX(e.touches[0].pageX - scrollRef.current.offsetLeft)
-    setScrollLeft(scrollRef.current.scrollLeft)
+    touchStartX.current = e.touches[0].pageX
+    touchScrollLeft.current = scrollRef.current.scrollLeft
+    touchStartTime.current = Date.now()
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!scrollRef.current) return
-    const x = e.touches[0].pageX - scrollRef.current.offsetLeft
-    const walk = (x - startX) * 2
-    scrollRef.current.scrollLeft = scrollLeft - walk
+    e.preventDefault()
+    const x = e.touches[0].pageX
+    const walk = (x - touchStartX.current) * 1.5 // Smoother multiplier
+    scrollRef.current.scrollLeft = touchScrollLeft.current - walk
   }
 
   const handleTouchEnd = () => {
-    // Snap to nearest card after touch
-    if (scrollRef.current) {
-      const cardWidth = scrollRef.current.clientWidth * 0.9
-      const gap = 16
-      let scrollPos = scrollRef.current.scrollLeft
+    if (!scrollRef.current) return
+    
+    // Calculate velocity for better snap
+    const touchEndTime = Date.now()
+    const duration = touchEndTime - touchStartTime.current
+    const distance = Math.abs(scrollRef.current.scrollLeft - touchScrollLeft.current)
+    const velocity = distance / duration
+    
+    // Find closest card to snap to
+    const containerRect = scrollRef.current.getBoundingClientRect()
+    const containerCenter = containerRect.left + containerRect.width / 2
+    
+    let closestIndex = 0
+    let closestDistance = Infinity
+    
+    for (let i = 0; i < scrollRef.current.children.length; i++) {
+      const card = scrollRef.current.children[i] as HTMLElement
+      const cardRect = card.getBoundingClientRect()
+      const cardCenter = cardRect.left + cardRect.width / 2
+      const distance = Math.abs(cardCenter - containerCenter)
       
-      if (isRTL) {
-        const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth
-        scrollPos = maxScroll - scrollPos
+      if (distance < closestDistance) {
+        closestDistance = distance
+        closestIndex = i
       }
-      
-      const newIndex = Math.round(scrollPos / (cardWidth + gap))
-      scrollToCard(Math.max(0, Math.min(newIndex, totalCards - 1)))
     }
+    
+    // Snap to closest card
+    setTimeout(() => {
+      scrollToCard(closestIndex)
+    }, 50)
   }
 
   // Arrow button component

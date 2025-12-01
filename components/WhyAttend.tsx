@@ -86,16 +86,16 @@ export default function WhyAttend() {
                 className="relative group film-grain h-full"
               >
                 <div className="relative h-full p-5 bg-dark-navy/60 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl hover:border-neon-purple transition-all duration-300 hover:shadow-glow-purple flex flex-row items-center gap-5 min-h-[180px] shadow-xl">
-                  {/* Large icon on mobile - 90x90 */}
-                  <div className="relative w-[90px] h-[90px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue">
+                  {/* Large icon on mobile - 140x140 */}
+                  <div className="relative w-[140px] h-[140px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue shadow-lg">
                     <Image 
                       src={feature.icon} 
                       alt={feature.title}
                       fill
                       loading="lazy"
-                      quality={85}
+                      quality={95}
                       className="object-cover"
-                      sizes="90px"
+                      sizes="140px"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent z-10"></div>
                   </div>

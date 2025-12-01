@@ -112,8 +112,8 @@ export default function Speakers() {
                     speaker.link ? 'cursor-pointer' : ''
                   }`}
                 >
-                  {/* Large icon/image on mobile - 90x90 */}
-                  <div className="relative w-[90px] h-[90px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue">
+                  {/* Large icon/image on mobile - 140x140 */}
+                  <div className="relative w-[140px] h-[140px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue shadow-lg">
                     {speaker.isImage ? (
                       <>
                         <Image
@@ -121,9 +121,9 @@ export default function Speakers() {
                           alt={speaker.name}
                           fill
                           className="object-cover"
-                          sizes="90px"
+                          sizes="140px"
                           loading="lazy"
-                          quality={85}
+                          quality={95}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent"></div>
                       </>
