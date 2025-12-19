@@ -98,8 +98,8 @@ export default function ContactPage() {
             </div>
             <h3 className="relative z-10 text-xs sm:text-sm md:text-lg font-bold text-white mb-1 sm:mb-2 leading-tight">{t('contact_phone')}</h3>
             <p className="relative z-10 text-[10px] sm:text-xs md:text-base text-gray-400">
-              <a href="https://wa.me/201093467510" target="_blank" rel="noopener noreferrer" className="hover:text-lavender transition-colors">
-                <span className="hidden sm:inline">01093467510</span>
+              <a href="https://wa.me/201023142124" target="_blank" rel="noopener noreferrer" className="hover:text-lavender transition-colors">
+                <span className="hidden sm:inline">01023142124</span>
                 <span className="sm:hidden">Phone</span>
               </a>
             </p>
