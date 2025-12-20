@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alramz-agency.com'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.elramzz.com'
 
 export const metadata: Metadata = {
   title: 'محتوى عروض العقارات - الرمز | مونتاج عروض عقارية احترافية',

@@ -7,7 +7,7 @@ import Head from 'next/head'
 export default function HreflangTags() {
   const { language } = useLanguage()
   const pathname = usePathname()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alramz-agency.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.elramzz.com'
   
   // Get current path without language prefix
   const currentPath = pathname === '/' ? '' : pathname
