@@ -13,7 +13,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default function ContactPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const sectionRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
 
