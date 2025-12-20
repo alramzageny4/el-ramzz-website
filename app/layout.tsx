@@ -40,6 +40,16 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.elramzz.com'),
+  icons: {
+    icon: [
+      { url: '/ChatGPT Image Nov 21, 2025, 08_46_14 PM.png', sizes: '32x32', type: 'image/png' },
+      { url: '/ChatGPT Image Nov 21, 2025, 08_46_14 PM.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/ChatGPT Image Nov 21, 2025, 08_46_14 PM.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/ChatGPT Image Nov 21, 2025, 08_46_14 PM.png',
+  },
   alternates: {
     canonical: '/',
     languages: {
