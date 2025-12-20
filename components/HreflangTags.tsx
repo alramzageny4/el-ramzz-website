@@ -14,9 +14,9 @@ export default function HreflangTags() {
   
   return (
     <>
-      <link rel="alternate" hreflang="ar" href={`${baseUrl}${currentPath}`} />
-      <link rel="alternate" hreflang="en" href={`${baseUrl}/en${currentPath}`} />
-      <link rel="alternate" hreflang="x-default" href={`${baseUrl}${currentPath}`} />
+      <link rel="alternate" hrefLang="ar" href={`${baseUrl}${currentPath}`} />
+      <link rel="alternate" hrefLang="en" href={`${baseUrl}/en${currentPath}`} />
+      <link rel="alternate" hrefLang="x-default" href={`${baseUrl}${currentPath}`} />
     </>
   )
 }
