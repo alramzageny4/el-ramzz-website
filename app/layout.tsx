@@ -34,12 +34,6 @@ export const metadata: Metadata = {
   authors: [{ name: 'الرمز - وكالة التصميم' }],
   creator: 'الرمز',
   publisher: 'الرمز',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
   formatDetection: {
     email: false,
     address: false,
@@ -93,6 +87,13 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -101,8 +102,8 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body>
-        <StructuredData type="both" />
         <LanguageProvider>
+          <StructuredData type="both" />
           <Cinematic3DVideo />
           {children}
           <ToasterProvider />

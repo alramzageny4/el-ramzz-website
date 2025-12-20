@@ -26,6 +26,8 @@ export default function StructuredData({ type = 'both', additionalSchemas = [] }
     schemas.push(...additionalSchemas)
   }
 
+  if (schemas.length === 0) return null
+
   return (
     <>
       {schemas.map((schema, index) => (
