@@ -90,7 +90,7 @@ export default function WhyAttend() {
                   <div className="relative w-[140px] h-[140px] flex-shrink-0 rounded-xl overflow-hidden bg-gradient-purple-blue shadow-lg">
                     <Image 
                       src={feature.icon} 
-                      alt={feature.title}
+                      alt={`${feature.title} - ${feature.description} - الرمز وكالة التصميم`}
                       fill
                       loading="lazy"
                       quality={95}
@@ -123,7 +123,7 @@ export default function WhyAttend() {
                 <div className="relative w-full aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] mb-2 md:mb-3 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                   <Image 
                     src={feature.icon} 
-                    alt={feature.title}
+                    alt={`${feature.title} - ${feature.description} - ${t('services_title')} - الرمز وكالة التصميم`}
                     fill
                     loading="lazy"
                     quality={85}

@@ -115,7 +115,7 @@ export default function Speakers() {
                       <>
                         <Image
                           src={speaker.image}
-                          alt={speaker.name}
+                          alt={`${speaker.name} - ${speaker.position} - ${t('nav_portfolio')} - الرمز وكالة التصميم`}
                           fill
                           className="object-cover"
                           sizes="140px"

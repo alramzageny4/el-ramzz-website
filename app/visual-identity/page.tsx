@@ -512,7 +512,7 @@ export default function VisualIdentityPage() {
                               <div className="relative w-full rounded-lg overflow-hidden bg-gray-900/30 border border-white/10 hover:border-white/30 transition-all duration-300 hover:shadow-lg">
                                 <Image
                                   src={getImagePath(selectedProject.id, image)}
-                                  alt={`${t(selectedProject.titleKey)} - ${index + 1}`}
+                                  alt={`${t(selectedProject.titleKey)} - ${t(selectedProject.roleKey)} - ${index + 1} - ${t('visual_identity_title')} - الرمز وكالة التصميم`}
                                   width={block.type === 'single' ? 1200 : block.type === 'triple' ? 600 : 800}
                                   height={block.type === 'tall' ? 1600 : 1200}
                                   className="w-full h-auto object-cover"
@@ -600,7 +600,7 @@ export default function VisualIdentityPage() {
                   <div className="relative w-full h-32 sm:h-48 md:h-64 lg:h-80 mb-2 sm:mb-3 md:mb-6 rounded-md md:rounded-lg overflow-hidden bg-gradient-purple-blue">
                     <Image
                       src={project.thumbnail}
-                      alt={t(project.titleKey)}
+                      alt={`${t(project.titleKey)} - ${t(project.roleKey)} - ${t('visual_identity_title')} - الرمز وكالة التصميم`}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, 50vw"

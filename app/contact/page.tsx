@@ -5,6 +5,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ContactForm from '@/components/ContactForm'
 import { useLanguage } from '@/contexts/LanguageContext'
+import StructuredData from '@/components/StructuredData'
+import { getServiceSchema } from '@/lib/structured-data'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -35,12 +37,23 @@ export default function ContactPage() {
     }
   }, [])
 
+  const serviceSchema = getServiceSchema(
+    'Creative Design Services',
+    t('contact_subtitle'),
+    language
+  )
+
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="relative py-24 px-6 overflow-hidden min-h-screen"
-    >
+    <>
+      <StructuredData 
+        type="organization" 
+        additionalSchemas={[serviceSchema]} 
+      />
+      <section
+        id="contact"
+        ref={sectionRef}
+        className="relative py-24 px-6 overflow-hidden min-h-screen"
+      >
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent"></div>
 
@@ -124,6 +137,7 @@ export default function ContactPage() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

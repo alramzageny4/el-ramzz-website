@@ -3,14 +3,34 @@ import './globals.css'
 import ToasterProvider from '@/components/ToasterProvider'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import Cinematic3DVideo from '@/components/Cinematic3DVideo'
+import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: {
     default: 'الرمز - وكالة التصميم الإبداعية',
     template: '%s | الرمز'
   },
-  description: 'وكالة إبداعية متخصصة في التصميم والمونتاج والأنيميشن. نحول أفكارك إلى واقع رقمي مذهل بجودة عالية وإبداع لا محدود.',
-  keywords: ['تصميم جرافيكي', 'مونتاج فيديو', 'أنيميشن', 'موشن جرافيك', 'هوية بصرية', 'مصر'],
+  description: 'وكالة إبداعية متخصصة في التصميم والمونتاج والأنيميشن. نحول أفكارك إلى واقع رقمي مذهل بجودة عالية وإبداع لا محدود. تصميم جرافيكي، مونتاج فيديو احترافي، أنيميشن ثلاثي الأبعاد، هوية بصرية متكاملة في مصر.',
+  keywords: [
+    'تصميم جرافيكي',
+    'مونتاج فيديو',
+    'أنيميشن',
+    'موشن جرافيك',
+    'هوية بصرية',
+    'تصميم شعار',
+    'مونتاج احترافي',
+    'وكالة تصميم',
+    'تصميم في مصر',
+    'أنيميشن ثلاثي الأبعاد',
+    'graphic design',
+    'video editing',
+    'animation',
+    'motion graphics',
+    'logo design',
+    'brand identity',
+    'creative agency',
+    'design agency Egypt',
+  ],
   authors: [{ name: 'الرمز - وكالة التصميم' }],
   creator: 'الرمز',
   publisher: 'الرمز',
@@ -28,6 +48,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://alramz-agency.com'),
   alternates: {
     canonical: '/',
+    languages: {
+      'ar': '/',
+      'en': '/en',
+      'x-default': '/',
+    },
   },
   openGraph: {
     type: 'website',
@@ -63,7 +88,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // google: 'your-google-verification-code',
+    google: 'SpstkClP6yPd0hmedgYOinJoI4Fcg9kkPxMZwtnZ-wM',
     // yandex: 'your-yandex-verification-code',
   },
 }
@@ -76,6 +101,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body>
+        <StructuredData type="both" />
         <LanguageProvider>
           <Cinematic3DVideo />
           {children}

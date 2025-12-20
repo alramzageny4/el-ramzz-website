@@ -5,6 +5,8 @@ import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLanguage } from '@/contexts/LanguageContext'
+import StructuredData from '@/components/StructuredData'
+import { getFAQSchema } from '@/lib/structured-data'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -61,12 +63,16 @@ export default function FAQ() {
     }
   }, [])
 
+  const faqSchema = getFAQSchema(faqs)
+
   return (
-    <section
-      id="faq"
-      ref={sectionRef}
-      className="relative py-24 px-6 overflow-hidden z-10"
-    >
+    <>
+      <StructuredData additionalSchemas={[faqSchema]} />
+      <section
+        id="faq"
+        ref={sectionRef}
+        className="relative py-24 px-6 overflow-hidden z-10"
+      >
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/10 to-transparent"></div>
 
@@ -150,6 +156,7 @@ export default function FAQ() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 
