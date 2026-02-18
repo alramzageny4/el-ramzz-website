@@ -113,7 +113,7 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.instagram.com/alramzz1?igsh=MXQyc3MxNzlwM2tvOQ=="
+                  href="https://www.instagram.com/alramzagency?igsh=YTF4amI1MDNzMXFi"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="relative w-8 h-8 flex items-center justify-center rounded-full bg-dark-navy/60 backdrop-blur-sm border border-purple-500/30 active:border-neon-purple transition-all duration-300 active:shadow-glow-purple text-pink-500 active:scale-110"

@@ -112,7 +112,7 @@ export function getOrganizationSchema(language: 'ar' | 'en' = 'ar'): Organizatio
     },
     sameAs: [
       'https://www.facebook.com/profile.php?id=61559193041396',
-      'https://www.instagram.com/alramzz1',
+      'https://www.instagram.com/alramzagency?igsh=YTF4amI1MDNzMXFi',
       'https://www.tiktok.com/@alramzagency',
     ],
   }
